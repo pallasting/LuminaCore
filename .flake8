@@ -1,0 +1,79 @@
+[flake8]
+# Maximum line length
+max-line-length = 88
+
+# Error codes to ignore
+ignore = 
+    # E203: whitespace before ':' (conflicts with black)
+    E203,
+    # W503: line break before binary operator (conflicts with black)
+    W503,
+    # E501: line too long (handled by black)
+    E501
+
+# Error codes to explicitly exclude (use with caution)
+extend-ignore = 
+    # E731: do not assign a lambda expression, use a def
+    E731
+
+# Maximum complexity for McCabe plugin
+max-complexity = 10
+
+# Directories and files to exclude
+exclude = 
+    .git,
+    __pycache__,
+    .pytest_cache,
+    .mypy_cache,
+    .coverage,
+    .tox,
+    .venv,
+    venv,
+    build,
+    dist,
+    *.egg-info,
+    htmlcov,
+    frontend,
+    docs,
+    src
+
+# Files to include (default is .py)
+filename = *.py
+
+# Statistics
+statistics = True
+
+# Show source code for each error
+show-source = True
+
+# Show explanation for each error code
+show-pep8 = True
+
+# Count errors and warnings
+count = True
+
+# Enable specific error checking
+select = 
+    # Pyflakes
+    F,
+    # Pycodestyle
+    E,
+    # McCabe complexity
+    C,
+    # Naming conventions
+    N,
+    # Import order
+    I,
+    # Docstrings
+    D
+
+# Per-file ignores
+per-file-ignores =
+    # __init__.py files can have unused imports
+    __init__.py:F401
+    # Test files can have unused imports and long lines
+    tests/*:F401,E501
+    # Setup files can have long lines
+    setup.py:E501
+    # Configuration files can have long lines
+    *.config.py:E501

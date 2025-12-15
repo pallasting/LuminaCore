@@ -1,0 +1,5 @@
+{
+  "name": "LuminaCore: Nanocrystal Optical Computing",
+  "description": "Interactive simulation of the LuminaCore architecture: A WDM-based reconfigurable photonic processor using 4nm rare-earth nanocrystals.",
+  "requestFramePermissions": []
+}
