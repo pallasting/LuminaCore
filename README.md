@@ -6,7 +6,7 @@
 
 **颠覆传统计算：光子计算将把AI推理成本降低1000倍**
 
-[![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/your-repo/lumina-flow/blob/main/notebooks/getting_started.ipynb)
+[![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/pallasting/LuminaCore/blob/main/notebooks/getting_started.ipynb)
 [![PyPI version](https://badge.fury.io/py/lumina-flow.svg)](https://pypi.org/project/lumina-flow/)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 [![Python 3.8+](https://img.shields.io/badge/python-3.8+-blue.svg)](https://www.python.org/downloads/)
@@ -182,8 +182,8 @@ NAT训练:   92.1% 准确率 (+2.9%)
 ### 贡献方式
 
 - [📖 文档改进](CONTRIBUTING.md#documentation)
-- [🐛 Bug报告](https://github.com/your-repo/lumina-flow/issues)
-- [✨ 功能请求](https://github.com/your-repo/lumina-flow/discussions)
+- [🐛 Bug报告](https://github.com/pallasting/LuminaCore/issues)
+- [✨ 功能请求](https://github.com/pallasting/LuminaCore/discussions)
 - [🔧 代码贡献](CONTRIBUTING.md#development)
 
 ## 📚 学习资源
@@ -202,10 +202,10 @@ NAT训练:   92.1% 准确率 (+2.9%)
 
 ## 📞 联系我们
 
-- **GitHub**: [your-repo/lumina-flow](https://github.com/your-repo/lumina-flow)
-- **Discord**: [加入社区讨论](https://discord.gg/lumina-flow)
-- **邮箱**: <team@luminacore.ai>
-- **Twitter**: [@LuminaCoreAI](https://twitter.com/LuminaCoreAI)
+- **GitHub**: [pallasting/LuminaCore](https://github.com/pallasting/LuminaCore)
+- **Discord**: [加入社区讨论](https://discord.gg/j3UGaF7Y)
+- **邮箱**: <pallasty@me.com>
+- **Twitter**: [@Pallasting](https://twitter.com/Pallasting)
 
 ## 📄 许可证
 
@@ -217,7 +217,7 @@ NAT训练:   92.1% 准确率 (+2.9%)
 
 **🌟 光子计算的时代即将到来，你准备好了吗？**
 
-[🚀 立即体验](https://colab.research.google.com/github/your-repo/lumina-flow/blob/main/notebooks/getting_started.ipynb) | [📖 阅读文档](docs/) | [🤝 加入社区](CONTRIBUTING.md)
+[🚀 立即体验](https://colab.research.google.com/github/pallasting/LuminaCore/blob/main/notebooks/getting_started.ipynb) | [📖 阅读文档](docs/) | [🤝 加入社区](CONTRIBUTING.md)
 
 *Built with ❤️ by the LuminaCore team*
 
