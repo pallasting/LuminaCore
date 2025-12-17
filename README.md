@@ -2,7 +2,7 @@
 
 <div align="center">
 
-![LuminaFlow Banner](assets/lumina_banner_v1.jpg)
+![LuminaFlow Banner](https://github.com/pallasting/LuminaCore/blob/main/assets/lumina_banner_v1.jpg)
 
 **颠覆传统计算：光子计算将把AI推理成本降低1000倍**
 
@@ -135,6 +135,8 @@ NAT训练:   92.1% 准确率 (+2.9%)
 
 光子硬件部署后准确率保持: 91.8% (-0.3%)
 ```
+
+![NAT Performance Benchmark](https://github.com/pallasting/LuminaCore/blob/main/assets/benchmark_chart.png)
 
 ## 🌍 应用场景
 
