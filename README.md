@@ -1,223 +1,223 @@
-# LuminaFlow: 光子计算的PyTorch原生加速
+# LuminaFlow: PyTorch-Native Acceleration for Photonic Computing
 
 <div align="center">
 
 ![LuminaFlow Banner](https://github.com/pallasting/LuminaCore/blob/main/assets/lumina_banner_v1.jpg)
 
-**颠覆传统计算：光子计算将把AI推理成本降低1000倍**
+**Revolutionizing Traditional Computing: Photonic Computing Will Reduce AI Inference Costs by 1000x**
 
 [![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/pallasting/LuminaCore/blob/main/notebooks/getting_started.ipynb)
 [![PyPI version](https://badge.fury.io/py/lumina-flow.svg)](https://pypi.org/project/lumina-flow/)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 [![Python 3.8+](https://img.shields.io/badge/python-3.8+-blue.svg)](https://www.python.org/downloads/)
 
-*🌟 边缘设备将拥有数据中心级的算力，每副AR眼镜都能运行GPT-5级模型*
+*🌟 Edge devices will have data center-level computing power, every pair of AR glasses can run GPT-5 level models*
 
-[English](README.md) | [技术文档](docs/) | [贡献指南](CONTRIBUTING.md)
+[English](README.md) | [中文](README.zh-CN.md) | [Technical Docs](docs/) | [Contributing Guide](CONTRIBUTING.md)
 
 </div>
 
 ---
 
-## 🌟 愿景：推倒摩尔定律的高墙
+## 🌟 Vision: Breaking Down Moore's Law Wall
 
-传统计算 paradigm 已经30年没有本质突破。**光子计算不是"更快一点"，而是"完全不同"的计算方式**。
+The traditional computing paradigm has not had a fundamental breakthrough in 30 years. **Photonic computing is not "faster," but a "completely different" way of computing.**
 
-我们相信：
+We believe:
 
-- ✅ 光子计算将把AI推理成本降低**1000倍**
-- ✅ 边缘设备将拥有**数据中心级的算力**
-- ✅ 每副AR眼镜都能运行**GPT-5级模型**
+- ✅ Photonic computing will reduce AI inference costs by **1000x**
+- ✅ Edge devices will have **data center-level computing power**
+- ✅ Every pair of AR glasses can run **GPT-5 level models**
 
-**加入我们，成为计算革命的见证者和创造者。**
+**Join us to become witnesses and creators of the computing revolution.**
 
-## 🚀 核心特性
+## 🚀 Core Features
 
-### ⚡ 高性能计算
+### ⚡ High-Performance Computing
 
-- **Rust加速核心**：矩阵乘法性能提升5-10x
-- **WDM复用支持**：波分复用技术，突破传统电子瓶颈
-- **硬件感知优化**：自动适配不同计算芯片配置
+- **Rust-Accelerated Core**: 5-10x performance improvement for matrix multiplication
+- **WDM Multiplexing Support**: Wavelength Division Multiplexing technology, breaking through traditional electronic bottlenecks
+- **Hardware-Aware Optimization**: Automatically adapts to different computing chip configurations
 
-### 🧠 AI原生支持
+### 🧠 AI-Native Support
 
-- **PyTorch兼容**：无缝集成现有AI工作流
-- **自动微分**：完整支持梯度计算和反向传播
-- **噪声感知训练**：NAT算法提升模型在光子硬件上的鲁棒性
+- **PyTorch Compatible**: Seamlessly integrates with existing AI workflows
+- **Automatic Differentiation**: Full support for gradient computation and backpropagation
+- **Noise-Aware Training**: NAT algorithm improves model robustness on photonic hardware
 
-### 🔧 开发者友好
+### 🔧 Developer-Friendly
 
-- **一键安装**：`pip install lumina-flow`
-- **即刻体验**：Google Colab在线运行
-- **完整文档**：从入门到高级应用的全面指南
+- **One-Click Installation**: `pip install lumina-flow`
+- **Instant Experience**: Google Colab online running
+- **Complete Documentation**: Comprehensive guides from beginner to advanced applications
 
-## 📦 快速开始
+## 📦 Quick Start
 
-### 安装
+### Installation
 
 ```bash
 pip install lumina-flow
 ```
 
-### 基础用法
+### Basic Usage
 
 ```python
 import torch
 import lumina as lnn
 
-# 创建光子加速层
+# Create photonic accelerated layer
 layer = lnn.OpticalLinear(784, 128, hardware_profile='lumina_nano_v1')
 
-# 标准PyTorch工作流
+# Standard PyTorch workflow
 x = torch.randn(32, 784)
-output = layer(x)  # 自动使用光子计算加速
+output = layer(x)  # Automatically uses photonic computing acceleration
 print(f"Output shape: {output.shape}")
 ```
 
-### 噪声感知训练
+### Noise-Aware Training
 
 ```python
 from lumina.optim import NoiseAwareTrainer
 
-# 创建NAT训练器
+# Create NAT trainer
 trainer = NoiseAwareTrainer(model, optimizer, robustness_target=0.95)
 
-# 训练循环
+# Training loop
 for epoch in range(100):
     trainer.train_step(batch_x, batch_y)
 ```
 
-## 🎯 技术亮点
+## 🎯 Technical Highlights
 
-| 特性 | LuminaFlow | 传统GPU | 提升倍数 |
-|------|------------|---------|----------|
-| **能效比** | 200 TOPS/W | 50 TOPS/W | **4x** |
-| **延迟** | <10μs | >100μs | **10x** |
-| **成本** | $0.01/推理 | $0.10/推理 | **10x** |
-| **规模** | 1024×1024 | 有限扩展 | **无上限** |
+| Feature | LuminaFlow | Traditional GPU | Improvement |
+|---------|------------|-----------------|-------------|
+| **Energy Efficiency** | 200 TOPS/W | 50 TOPS/W | **4x** |
+| **Latency** | <10μs | >100μs | **10x** |
+| **Cost** | $0.01/inference | $0.10/inference | **10x** |
+| **Scalability** | 1024×1024 | Limited scaling | **Unlimited** |
 
-## 🏗️ 架构设计
+## 🏗️ Architecture Design
 
 ```
 ┌─────────────────┐    ┌─────────────────┐    ┌─────────────────┐
-│   Python API    │    │  Rust Kernel    │    │  光子硬件模拟   │
+│   Python API    │    │  Rust Kernel    │    │ Photonic HW Sim │
 │                 │    │                 │    │                 │
-│ • PyTorch兼容   │◄──►│ • 高性能计算   │◄──►│ • WDM复用       │
-│ • 自动微分     │    │ • SIMD优化      │    │ • 噪声建模      │
-│ • 模型转换     │    │ • 内存池管理   │    │ • 硬件配置       │
+│ • PyTorch Compat │◄──►│ • High Perf Comp│◄──►│ • WDM Multiplex │
+│ • Auto Diff     │    │ • SIMD Optimized│    │ • Noise Modeling│
+│ • Model Convert │    │ • Memory Pool   │    │ • HW Config     │
 └─────────────────┘    └─────────────────┘    └─────────────────┘
 ```
 
-## 📊 性能基准
+## 📊 Performance Benchmarks
 
-### 推理性能对比
+### Inference Performance Comparison
 
 ```
-模型: ResNet-50 (ImageNet分类)
-硬件: 模拟光子芯片 (64×64阵列)
+Model: ResNet-50 (ImageNet Classification)
+Hardware: Simulated Photonic Chip (64×64 Array)
 
 LuminaFlow: 1250 FPS @ 45W (27.8 TOPS/W)
-传统GPU:   850 FPS @ 150W (5.7 TOPS/W)
+Traditional GPU: 850 FPS @ 150W (5.7 TOPS/W)
 
-性能提升: 1.47x
-能效提升: 4.9x
+Performance Improvement: 1.47x
+Energy Efficiency Improvement: 4.9x
 ```
 
-### 训练收敛对比
+### Training Convergence Comparison
 
 ```
-数据集: CIFAR-10
-模型: 6层CNN
-训练时间: 100 epochs
+Dataset: CIFAR-10
+Model: 6-layer CNN
+Training Time: 100 epochs
 
-标准训练: 89.2% 准确率
-NAT训练:   92.1% 准确率 (+2.9%)
+Standard Training: 89.2% Accuracy
+NAT Training: 92.1% Accuracy (+2.9%)
 
-光子硬件部署后准确率保持: 91.8% (-0.3%)
+Post-photonic hardware deployment accuracy retention: 91.8% (-0.3%)
 ```
 
 ![NAT Performance Benchmark](https://github.com/pallasting/LuminaCore/blob/main/assets/benchmark_chart.png)
 
-## 🌍 应用场景
+## 🌍 Application Scenarios
 
-### 🤖 AI推理加速
+### 🤖 AI Inference Acceleration
 
-- **自动驾驶**：实时环境感知，降低延迟至微秒级
-- **AR/VR**：眼镜端AI处理，支持复杂场景理解
-- **边缘计算**：物联网设备本地AI推理，减少云依赖
+- **Autonomous Driving**: Real-time environmental perception, reducing latency to microsecond level
+- **AR/VR**: Glasses-side AI processing, supporting complex scene understanding
+- **Edge Computing**: IoT device local AI inference, reducing cloud dependency
 
-### 🔬 科学计算
+### 🔬 Scientific Computing
 
-- **分子动力学**：药物发现加速1000倍
-- **气候建模**：全球气候预测实时更新
-- **量子化学**：量子计算预处理和后处理
+- **Molecular Dynamics**: 1000x drug discovery acceleration
+- **Climate Modeling**: Real-time global climate prediction updates
+- **Quantum Chemistry**: Quantum computing preprocessing and postprocessing
 
-### 📱 消费电子
+### 📱 Consumer Electronics
 
-- **智能手机**：本地AI处理，隐私保护和功耗优化
-- **智能家居**：设备端语音识别和图像处理
-- **可穿戴设备**：连续健康监测和行为识别
+- **Smartphones**: Local AI processing, privacy protection and power optimization
+- **Smart Home**: Device-side speech recognition and image processing
+- **Wearable Devices**: Continuous health monitoring and behavior recognition
 
-## 🤝 社区与贡献
+## 🤝 Community and Contributions
 
-### 核心贡献者招募
+### Core Contributor Recruitment
 
-我们正在寻找以下背景的贡献者：
+We are looking for contributors with the following backgrounds:
 
-#### 👨‍🔬 光学物理专家
+#### 👨‍🔬 Optics Physics Experts
 
-- **奖励**: 未来 LuminaCore 硬件的优先测试权
-- **任务**: 改进噪声模型的物理准确性
+- **Reward**: Priority testing rights for future LuminaCore hardware
+- **Tasks**: Improve physical accuracy of noise models
 
-#### 👨‍💻 编译器工程师
+#### 👨‍💻 Compiler Engineers
 
-- **奖励**: 技术合伙人机会
-- **任务**: 实现 PyTorch 到光子指令的自动转换
+- **Reward**: Technical partnership opportunities
+- **Tasks**: Implement automatic conversion from PyTorch to photonic instructions
 
-#### 🤖 机器学习研究者
+#### 🤖 Machine Learning Researchers
 
-- **奖励**: 联合发表论文机会
-- **任务**: 开发光子加速的 Transformer 模型
+- **Reward**: Co-authored paper opportunities
+- **Tasks**: Develop photonic-accelerated Transformer models
 
-### 贡献方式
+### Contribution Methods
 
-- [📖 文档改进](CONTRIBUTING.md#documentation)
-- [🐛 Bug报告](https://github.com/pallasting/LuminaCore/issues)
-- [✨ 功能请求](https://github.com/pallasting/LuminaCore/discussions)
-- [🔧 代码贡献](CONTRIBUTING.md#development)
+- [📖 Documentation Improvement](CONTRIBUTING.md#documentation)
+- [🐛 Bug Reports](https://github.com/pallasting/LuminaCore/issues)
+- [✨ Feature Requests](https://github.com/pallasting/LuminaCore/discussions)
+- [🔧 Code Contributions](CONTRIBUTING.md#development)
 
-## 📚 学习资源
+## 📚 Learning Resources
 
-- [**快速开始指南**](docs/getting-started.md) - 5分钟上手
-- [**API参考**](docs/api/) - 完整API文档
-- [**教程合集**](docs/tutorials/) - 从基础到高级
-- [**性能优化**](docs/optimization.md) - 最佳实践指南
-- [**硬件配置**](docs/hardware.md) - 支持的芯片配置
+- [**Quick Start Guide**](docs/getting-started.md) - Get started in 5 minutes
+- [**API Reference**](docs/api/) - Complete API documentation
+- [**Tutorial Collection**](docs/tutorials/) - From basic to advanced
+- [**Performance Optimization**](docs/optimization.md) - Best practices guide
+- [**Hardware Configuration**](docs/hardware.md) - Supported chip configurations
 
-## 📰 最新动态
+## 📰 Latest Updates
 
-- **2025.12.15**: 发布 LuminaFlow v0.1.0，支持基础光子层和NAT训练
-- **2025.12.08**: 开源核心算法，实现WDM复用光子计算
-- **2025.11.20**: 完成数字孪生系统，支持实时硬件监控
+- **2025.12.15**: Released LuminaFlow v0.1.0, supporting basic photonic layers and NAT training
+- **2025.12.08**: Open-sourced core algorithms, implementing WDM multiplexed photonic computing
+- **2025.11.20**: Completed digital twin system, supporting real-time hardware monitoring
 
-## 📞 联系我们
+## 📞 Contact Us
 
 - **GitHub**: [pallasting/LuminaCore](https://github.com/pallasting/LuminaCore)
-- **Discord**: [加入社区讨论](https://discord.gg/j3UGaF7Y)
-- **邮箱**: <pallasty@me.com>
+- **Discord**: [Join Community Discussion](https://discord.gg/j3UGaF7Y)
+- **Email**: <pallasty@me.com>
 - **Twitter**: [@Pallasting](https://twitter.com/Pallasting)
 
-## 📄 许可证
+## 📄 License
 
-本项目采用 MIT 许可证 - 详见 [LICENSE](LICENSE) 文件
+This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details
 
 ---
 
 <div align="center">
 
-**🌟 光子计算的时代即将到来，你准备好了吗？**
+**🌟 The era of photonic computing is coming, are you ready?**
 
-[🚀 立即体验](https://colab.research.google.com/github/pallasting/LuminaCore/blob/main/notebooks/getting_started.ipynb) | [📖 阅读文档](docs/) | [🤝 加入社区](CONTRIBUTING.md)
+[🚀 Try Now](https://colab.research.google.com/github/pallasting/LuminaCore/blob/main/notebooks/getting_started.ipynb) | [📖 Read Docs](docs/) | [🤝 Join Community](CONTRIBUTING.md)
 
 *Built with ❤️ by the LuminaCore team*
 
