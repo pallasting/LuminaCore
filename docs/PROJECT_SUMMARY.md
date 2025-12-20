@@ -34,6 +34,16 @@ lumina/
   - 噪声注入（散粒噪声、热噪声、温度漂移）
   - DAC/ADC 量化模拟（2-bit 到 8-bit）
   - WDM 支持
+  - **[v0.2 新增]** 支持多维输入张量（适配 Transformer）
+
+- ✅ **OpticalAttention**: 光子多头注意力机制 **[v0.2 新增]**
+  - 基于 OpticalLinear 的 Q/K/V/Output 投影
+  - 支持 Causal Masking (GPT 模式)
+  - 混合架构：光子线性变换 + 数字 Softmax
+
+- ✅ **OpticalTransformerBlock**: 光子 Transformer 块 **[v0.2 新增]**
+  - Pre-Norm 架构
+  - 集成 OpticalAttention 和 OpticalMLP
   
 - ✅ **NoiseAwareTrainer**: 噪声感知训练器
   - 自动梯度噪声注入
@@ -176,7 +186,10 @@ benchmark_robustness(model, test_loader, save_path="report.png")
 3. ✅ Logo 已设计
 4. ⏳ 准备发布到 PyPI（可选）
 
-### v0.2 计划
+### v0.2 计划 (进行中 🚧)
+- [x] 支持注意力机制 (`OpticalAttention`)
+- [x] 支持 Transformer 块 (`OpticalTransformerBlock`)
+- [ ] 构建 OpticalGPT 模型 (`lumina/models/gpt.py`)
 - [ ] 部署编译器 (`compiler/exporter.py`)
 - [ ] WDM 通道映射优化
 - [ ] 更多硬件配置预设
@@ -184,7 +197,6 @@ benchmark_robustness(model, test_loader, save_path="report.png")
 
 ### v0.3 计划
 - [ ] 支持卷积层 (`OpticalConv2d`)
-- [ ] 支持注意力机制 (`OpticalAttention`)
 - [ ] 真实芯片校准工具
 
 ---

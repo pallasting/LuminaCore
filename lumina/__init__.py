@@ -11,8 +11,8 @@ import sys
 
 from . import layers
 from . import layers as _layers
-from . import optim, viz
+from . import optim, viz, models
 
 sys.modules[__name__ + ".nn"] = _layers
 
-__all__ = ["layers", "nn", "optim", "viz"]
+__all__ = ["layers", "nn", "optim", "viz", "models"]
