@@ -44,6 +44,11 @@ lumina/
 - ✅ **OpticalTransformerBlock**: 光子 Transformer 块 **[v0.2 新增]**
   - Pre-Norm 架构
   - 集成 OpticalAttention 和 OpticalMLP
+
+- ✅ **OpticalGPT**: 光子生成式预训练模型 **[v0.2 新增]**
+  - 完整的 GPT 架构实现
+  - 集成 Token Embedding 和 Positional Embedding
+  - 支持文本生成 (`generate` 方法)
   
 - ✅ **NoiseAwareTrainer**: 噪声感知训练器
   - 自动梯度噪声注入
@@ -186,14 +191,20 @@ benchmark_robustness(model, test_loader, save_path="report.png")
 3. ✅ Logo 已设计
 4. ⏳ 准备发布到 PyPI（可选）
 
-### v0.2 计划 (进行中 🚧)
+### v0.2 计划 (已完成 ✅)
 - [x] 支持注意力机制 (`OpticalAttention`)
 - [x] 支持 Transformer 块 (`OpticalTransformerBlock`)
-- [ ] 构建 OpticalGPT 模型 (`lumina/models/gpt.py`)
+- [x] 构建 OpticalGPT 模型 (`lumina/models/gpt.py`)
+- [x] 端到端训练示例 (`examples/train_gpt_shakespeare.py`)
+- [x] 鲁棒性可视化 (`examples/visualize_gpt_robustness.py`)
+
+### v0.3 计划 (即将开始 🚀)
 - [ ] 部署编译器 (`compiler/exporter.py`)
 - [ ] WDM 通道映射优化
 - [ ] 更多硬件配置预设
 - [ ] 性能基准测试
+- [ ] 支持卷积层 (`OpticalConv2d`)
+- [ ] 真实芯片校准工具
 
 ### v0.3 计划
 - [ ] 支持卷积层 (`OpticalConv2d`)
