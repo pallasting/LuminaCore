@@ -258,6 +258,51 @@ class NoiseAwareTrainer:
                         f"Train Loss: {train_loss:.4f}, Train Acc: {train_acc:.2f}%"
                     )
 
+    def train_step(self, inputs: torch.Tensor, targets: torch.Tensor) -> Any:
+        """
+        执行单步训练（包含噪声注入）
+        
+        Args:
+            inputs: 输入数据
+            targets: 目标标签
+            
+        Returns:
+            loss: 当前步的损失值
+            robustness: 当前估计的鲁棒性指标 (0.0-1.0)
+        """
+        self.model.train()
+        self.optimizer.zero_grad()
+        
+        # Forward
+        # Handle models that return (logits, loss) or just logits
+        output = self.model(inputs, targets=targets)
+        
+        if isinstance(output, tuple):
+            logits, loss = output
+            if loss is None:
+                loss = self.criterion(logits, targets)
+        else:
+            logits = output
+            loss = self.criterion(logits, targets)
+            
+        # Backward
+        loss.backward()
+        
+        # Inject Noise
+        # We use a simplified epoch estimation for noise scheduling in step mode
+        # Or just use max_noise_level if epoch is not tracked
+        # Default to max noise if not in an epoch loop
+        epoch = self.current_epoch if self.current_epoch > 0 else 1
+        total_epochs = 1 # Normalize to 1 if unknown
+        
+        self.inject_gradient_noise(epoch, total_epochs)
+        
+        # Step
+        self.optimizer.step()
+        
+        # Estimate robustness (simplified)
+        return loss.item(), 1.0 - self.max_noise_level
+
     def get_history(self) -> Dict[str, list]:
         """获取训练历史"""
         return self.history.copy()
