@@ -34,14 +34,25 @@ pub fn parallel_matmul(input: ArrayView2<f32>, weight: ArrayView2<f32>) -> Array
         .zip(input.axis_iter(Axis(0)).into_par_iter())
         .for_each(|(mut output_row, input_row)| {
             // 对每个输出特征
+            // 优化：使用内部循环展开或 BLAS 风格的向量化
+            // 对于较大的 in_features，这可以显著提高缓存命中率
             for (j, weight_row) in weight.axis_iter(Axis(0)).enumerate() {
-                // 计算点积: output[i][j] = sum(input[i][k] * weight[j][k])
-                let dot_product: f32 = input_row
-                    .iter()
-                    .zip(weight_row.iter())
-                    .map(|(a, b)| a * b)
-                    .sum();
-                output_row[j] = dot_product;
+                let mut sum = 0.0;
+                let chunks_a = input_row.as_slice().unwrap().chunks_exact(8);
+                let chunks_b = weight_row.as_slice().unwrap().chunks_exact(8);
+                let rem_a = chunks_a.remainder();
+                let rem_b = chunks_b.remainder();
+
+                for (ca, cb) in chunks_a.zip(chunks_b) {
+                    sum += ca[0] * cb[0] + ca[1] * cb[1] + ca[2] * cb[2] + ca[3] * cb[3] +
+                           ca[4] * cb[4] + ca[5] * cb[5] + ca[6] * cb[6] + ca[7] * cb[7];
+                }
+                
+                for (ra, rb) in rem_a.iter().zip(rem_b.iter()) {
+                    sum += ra * rb;
+                }
+                
+                output_row[j] = sum;
             }
         });
     

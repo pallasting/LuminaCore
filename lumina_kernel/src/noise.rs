@@ -47,6 +47,24 @@ impl FastRng {
     pub fn normal(&mut self, mean: f32, std: f32) -> f32 {
         mean + std * self.randn()
     }
+    /// 生成热噪声 (Thermal Noise)
+    ///
+    /// 基于玻尔兹曼常数和温度的简化模型
+    #[inline(always)]
+    pub fn thermal_noise(&mut self, temperature_k: f32) -> f32 {
+        // 噪声功率与温度成正比
+        let noise_std = (temperature_k / 300.0).sqrt() * 0.01;
+        self.normal(0.0, noise_std)
+    }
+
+    /// 生成串扰噪声 (Crosstalk)
+    ///
+    /// 模拟相邻波导或通道之间的信号泄漏
+    #[inline(always)]
+    pub fn crosstalk_noise(&mut self, signal_intensity: f32, coupling_coeff: f32) -> f32 {
+        let mean_leakage = signal_intensity * coupling_coeff;
+        self.normal(mean_leakage, mean_leakage * 0.1)
+    }
 }
 
 /// 线程本地随机数生成器池

@@ -341,6 +341,8 @@ class OpticalLinear(nn.Module):
                 weight_np,
                 bias_np,
                 noise_std=self.noise_level,
+                temperature_k=300.0, # Default room temp
+                crosstalk_coeff=0.01, # Default crosstalk
                 bits=self.precision,
                 seed=np.random.randint(0, 2**32)
             )

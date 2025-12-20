@@ -25,6 +25,8 @@ pub fn optical_linear_forward(
     weight: ArrayView2<f32>,
     bias: Option<&[f32]>,
     noise_std: f32,
+    temperature_k: f32,
+    crosstalk_coeff: f32,
     bits: u8,
     seed: u64,
 ) -> Array2<f32> {
@@ -82,11 +84,19 @@ pub fn optical_linear_forward(
                     dot_product += b[j];
                 }
                 
-                // 步骤 2: 噪声注入（信号依赖）
-                // 模拟光路散粒噪声：noise ∝ √signal
-                let signal_dependent_noise = noise_std * dot_product.abs().sqrt();
-                let noise = rng.normal(0.0, signal_dependent_noise);
-                let noisy_signal = dot_product + noise;
+                // 步骤 2: 噪声注入（多物理场融合）
+                
+                // 2.1 散粒噪声 (Shot Noise): noise ∝ √signal
+                let shot_noise_std = noise_std * dot_product.abs().sqrt();
+                let shot_noise = rng.normal(0.0, shot_noise_std);
+                
+                // 2.2 热噪声 (Thermal Noise)
+                let thermal_noise = rng.thermal_noise(temperature_k);
+                
+                // 2.3 串扰噪声 (Crosstalk)
+                let crosstalk = rng.crosstalk_noise(dot_product, crosstalk_coeff);
+                
+                let noisy_signal = dot_product + shot_noise + thermal_noise + crosstalk;
                 
                 // 步骤 3: 量化（模拟 ADC）
                 let quantized = quantizer.quantize(noisy_signal);

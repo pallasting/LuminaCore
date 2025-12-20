@@ -40,6 +40,8 @@ fn optical_linear_fused<'py>(
     weight: PyReadonlyArray2<f32>,
     bias: Option<PyReadonlyArray1<f32>>,
     noise_std: f32,
+    temperature_k: f32,
+    crosstalk_coeff: f32,
     bits: u8,
     seed: u64,
 ) -> PyResult<&'py PyArray2<f32>> {
@@ -52,6 +54,8 @@ fn optical_linear_fused<'py>(
         weight_view,
         bias_slice,
         noise_std,
+        temperature_k,
+        crosstalk_coeff,
         bits,
         seed,
     );
