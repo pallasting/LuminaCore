@@ -37,3 +37,6 @@ frontend/dist/
 
 # Datasets
 input.txt
+
+# Artifacts
+gpt_robustness.png
