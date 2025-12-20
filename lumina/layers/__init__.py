@@ -7,5 +7,6 @@ LuminaFlow 硬件感知层模块
 from .optical_linear import OpticalLinear
 from .wdm_mapping import WDMChannelMapper
 from .attention import OpticalAttention
+from .transformer_block import OpticalTransformerBlock
 
-__all__ = ["OpticalLinear", "WDMChannelMapper", "OpticalAttention"]
+__all__ = ["OpticalLinear", "WDMChannelMapper", "OpticalAttention", "OpticalTransformerBlock"]
