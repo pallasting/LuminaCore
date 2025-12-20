@@ -135,11 +135,11 @@ class OpticalLinear(nn.Module):
         if not isinstance(x, torch.Tensor):
             raise ValidationError(f"Input must be a torch.Tensor, got {type(x)}")
 
-        if x.dim() != 2:
-            raise ValidationError(f"Input tensor must be 2-dimensional [batch_size, in_features], got shape {x.shape}")
+        if x.dim() < 2:
+            raise ValidationError(f"Input tensor must be at least 2-dimensional, got shape {x.shape}")
 
-        if x.shape[1] != self.in_features:
-            raise ValidationError(f"Input feature dimension {x.shape[1]} does not match expected {self.in_features}")
+        if x.shape[-1] != self.in_features:
+            raise ValidationError(f"Input feature dimension {x.shape[-1]} does not match expected {self.in_features}")
 
         if torch.isnan(x).any():
             raise ValidationError("Input tensor contains NaN values")
@@ -281,33 +281,46 @@ class OpticalLinear(nn.Module):
         前向传播
 
         Args:
-            x: 输入张量 [batch_size, in_features]
+            x: 输入张量 [..., in_features]
 
         Returns:
-            输出张量 [batch_size, out_features]
+            输出张量 [..., out_features]
         """
         # 输入验证
         self._validate_forward_input(x)
 
+        # 处理多维输入
+        is_multidim = x.dim() > 2
+        if is_multidim:
+            original_shape = x.shape
+            x = x.reshape(-1, self.in_features)
+
         # Rust 后端快速路径（如果启用且可用）
         if USE_RUST_BACKEND and not torch.is_complex(x):
-            return self._forward_rust(x)
+            output = self._forward_rust(x)
+        else:
+            # PyTorch 标准路径
+            # Step 1: DAC 转换（输入量化）
+            opt_input = self.dac_convert(x)
 
-        # PyTorch 标准路径
-        # Step 1: DAC 转换（输入量化）
-        opt_input = self.dac_convert(x)
+            # Step 2: 光学矩阵乘法（包含噪声）
+            opt_output = self.optical_matrix_multiply(opt_input, self.weight)
 
-        # Step 2: 光学矩阵乘法（包含噪声）
-        opt_output = self.optical_matrix_multiply(opt_input, self.weight)
+            # Step 3: ADC 转换（输出量化）
+            digital_output = self.adc_convert(opt_output)
 
-        # Step 3: ADC 转换（输出量化）
-        digital_output = self.adc_convert(opt_output)
+            # Step 4: 添加偏置（如果有）
+            if self.bias is not None:
+                digital_output = digital_output + self.bias
+            
+            output = digital_output
 
-        # Step 4: 添加偏置（如果有）
-        if self.bias is not None:
-            digital_output = digital_output + self.bias
+        # 恢复形状
+        if is_multidim:
+            output_shape = original_shape[:-1] + (self.out_features,)
+            output = output.reshape(output_shape)
 
-        return digital_output
+        return output
     
     def _forward_rust(self, x: torch.Tensor) -> torch.Tensor:
         """
