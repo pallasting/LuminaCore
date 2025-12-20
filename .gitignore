@@ -34,3 +34,6 @@ build/
 # Frontend specific
 frontend/node_modules/
 frontend/dist/
+
+# Datasets
+input.txt
