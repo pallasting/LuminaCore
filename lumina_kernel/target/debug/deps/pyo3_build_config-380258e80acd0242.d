@@ -1,0 +1,14 @@
+/home/pallasting/ 文档/RainbowLuminaCore/lumina_kernel/target/debug/deps/pyo3_build_config-380258e80acd0242.d: /home/pallasting/.cargo/registry/src/mirrors.ustc.edu.cn-38d0e5eb5da2abae/pyo3-build-config-0.23.5/src/lib.rs /home/pallasting/.cargo/registry/src/mirrors.ustc.edu.cn-38d0e5eb5da2abae/pyo3-build-config-0.23.5/src/errors.rs /home/pallasting/.cargo/registry/src/mirrors.ustc.edu.cn-38d0e5eb5da2abae/pyo3-build-config-0.23.5/src/impl_.rs /home/pallasting/\ 文档/RainbowLuminaCore/lumina_kernel/target/debug/build/pyo3-build-config-3f1d28e4eab027fe/out/pyo3-build-config-file.txt /home/pallasting/\ 文档/RainbowLuminaCore/lumina_kernel/target/debug/build/pyo3-build-config-3f1d28e4eab027fe/out/pyo3-build-config.txt
+
+/home/pallasting/ 文档/RainbowLuminaCore/lumina_kernel/target/debug/deps/libpyo3_build_config-380258e80acd0242.rlib: /home/pallasting/.cargo/registry/src/mirrors.ustc.edu.cn-38d0e5eb5da2abae/pyo3-build-config-0.23.5/src/lib.rs /home/pallasting/.cargo/registry/src/mirrors.ustc.edu.cn-38d0e5eb5da2abae/pyo3-build-config-0.23.5/src/errors.rs /home/pallasting/.cargo/registry/src/mirrors.ustc.edu.cn-38d0e5eb5da2abae/pyo3-build-config-0.23.5/src/impl_.rs /home/pallasting/\ 文档/RainbowLuminaCore/lumina_kernel/target/debug/build/pyo3-build-config-3f1d28e4eab027fe/out/pyo3-build-config-file.txt /home/pallasting/\ 文档/RainbowLuminaCore/lumina_kernel/target/debug/build/pyo3-build-config-3f1d28e4eab027fe/out/pyo3-build-config.txt
+
+/home/pallasting/ 文档/RainbowLuminaCore/lumina_kernel/target/debug/deps/libpyo3_build_config-380258e80acd0242.rmeta: /home/pallasting/.cargo/registry/src/mirrors.ustc.edu.cn-38d0e5eb5da2abae/pyo3-build-config-0.23.5/src/lib.rs /home/pallasting/.cargo/registry/src/mirrors.ustc.edu.cn-38d0e5eb5da2abae/pyo3-build-config-0.23.5/src/errors.rs /home/pallasting/.cargo/registry/src/mirrors.ustc.edu.cn-38d0e5eb5da2abae/pyo3-build-config-0.23.5/src/impl_.rs /home/pallasting/\ 文档/RainbowLuminaCore/lumina_kernel/target/debug/build/pyo3-build-config-3f1d28e4eab027fe/out/pyo3-build-config-file.txt /home/pallasting/\ 文档/RainbowLuminaCore/lumina_kernel/target/debug/build/pyo3-build-config-3f1d28e4eab027fe/out/pyo3-build-config.txt
+
+/home/pallasting/.cargo/registry/src/mirrors.ustc.edu.cn-38d0e5eb5da2abae/pyo3-build-config-0.23.5/src/lib.rs:
+/home/pallasting/.cargo/registry/src/mirrors.ustc.edu.cn-38d0e5eb5da2abae/pyo3-build-config-0.23.5/src/errors.rs:
+/home/pallasting/.cargo/registry/src/mirrors.ustc.edu.cn-38d0e5eb5da2abae/pyo3-build-config-0.23.5/src/impl_.rs:
+/home/pallasting/\ 文档/RainbowLuminaCore/lumina_kernel/target/debug/build/pyo3-build-config-3f1d28e4eab027fe/out/pyo3-build-config-file.txt:
+/home/pallasting/\ 文档/RainbowLuminaCore/lumina_kernel/target/debug/build/pyo3-build-config-3f1d28e4eab027fe/out/pyo3-build-config.txt:
+
+# env-dep:CARGO_PKG_VERSION=0.23.5
+# env-dep:OUT_DIR=/home/pallasting/ 文档/RainbowLuminaCore/lumina_kernel/target/debug/build/pyo3-build-config-3f1d28e4eab027fe/out

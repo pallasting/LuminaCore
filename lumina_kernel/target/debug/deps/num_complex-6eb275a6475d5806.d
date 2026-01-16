@@ -1,0 +1,8 @@
+/home/pallasting/ 文档/RainbowLuminaCore/lumina_kernel/target/debug/deps/num_complex-6eb275a6475d5806.d: /home/pallasting/.cargo/registry/src/mirrors.ustc.edu.cn-38d0e5eb5da2abae/num-complex-0.4.6/src/lib.rs /home/pallasting/.cargo/registry/src/mirrors.ustc.edu.cn-38d0e5eb5da2abae/num-complex-0.4.6/src/cast.rs /home/pallasting/.cargo/registry/src/mirrors.ustc.edu.cn-38d0e5eb5da2abae/num-complex-0.4.6/src/pow.rs /home/pallasting/.cargo/registry/src/mirrors.ustc.edu.cn-38d0e5eb5da2abae/num-complex-0.4.6/src/complex_float.rs
+
+/home/pallasting/ 文档/RainbowLuminaCore/lumina_kernel/target/debug/deps/libnum_complex-6eb275a6475d5806.rmeta: /home/pallasting/.cargo/registry/src/mirrors.ustc.edu.cn-38d0e5eb5da2abae/num-complex-0.4.6/src/lib.rs /home/pallasting/.cargo/registry/src/mirrors.ustc.edu.cn-38d0e5eb5da2abae/num-complex-0.4.6/src/cast.rs /home/pallasting/.cargo/registry/src/mirrors.ustc.edu.cn-38d0e5eb5da2abae/num-complex-0.4.6/src/pow.rs /home/pallasting/.cargo/registry/src/mirrors.ustc.edu.cn-38d0e5eb5da2abae/num-complex-0.4.6/src/complex_float.rs
+
+/home/pallasting/.cargo/registry/src/mirrors.ustc.edu.cn-38d0e5eb5da2abae/num-complex-0.4.6/src/lib.rs:
+/home/pallasting/.cargo/registry/src/mirrors.ustc.edu.cn-38d0e5eb5da2abae/num-complex-0.4.6/src/cast.rs:
+/home/pallasting/.cargo/registry/src/mirrors.ustc.edu.cn-38d0e5eb5da2abae/num-complex-0.4.6/src/pow.rs:
+/home/pallasting/.cargo/registry/src/mirrors.ustc.edu.cn-38d0e5eb5da2abae/num-complex-0.4.6/src/complex_float.rs:

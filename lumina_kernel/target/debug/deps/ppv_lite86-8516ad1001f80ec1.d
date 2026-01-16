@@ -1,0 +1,9 @@
+/home/pallasting/ 文档/RainbowLuminaCore/lumina_kernel/target/debug/deps/ppv_lite86-8516ad1001f80ec1.d: /home/pallasting/.cargo/registry/src/mirrors.ustc.edu.cn-38d0e5eb5da2abae/ppv-lite86-0.2.21/src/lib.rs /home/pallasting/.cargo/registry/src/mirrors.ustc.edu.cn-38d0e5eb5da2abae/ppv-lite86-0.2.21/src/soft.rs /home/pallasting/.cargo/registry/src/mirrors.ustc.edu.cn-38d0e5eb5da2abae/ppv-lite86-0.2.21/src/types.rs /home/pallasting/.cargo/registry/src/mirrors.ustc.edu.cn-38d0e5eb5da2abae/ppv-lite86-0.2.21/src/x86_64/mod.rs /home/pallasting/.cargo/registry/src/mirrors.ustc.edu.cn-38d0e5eb5da2abae/ppv-lite86-0.2.21/src/x86_64/sse2.rs
+
+/home/pallasting/ 文档/RainbowLuminaCore/lumina_kernel/target/debug/deps/libppv_lite86-8516ad1001f80ec1.rmeta: /home/pallasting/.cargo/registry/src/mirrors.ustc.edu.cn-38d0e5eb5da2abae/ppv-lite86-0.2.21/src/lib.rs /home/pallasting/.cargo/registry/src/mirrors.ustc.edu.cn-38d0e5eb5da2abae/ppv-lite86-0.2.21/src/soft.rs /home/pallasting/.cargo/registry/src/mirrors.ustc.edu.cn-38d0e5eb5da2abae/ppv-lite86-0.2.21/src/types.rs /home/pallasting/.cargo/registry/src/mirrors.ustc.edu.cn-38d0e5eb5da2abae/ppv-lite86-0.2.21/src/x86_64/mod.rs /home/pallasting/.cargo/registry/src/mirrors.ustc.edu.cn-38d0e5eb5da2abae/ppv-lite86-0.2.21/src/x86_64/sse2.rs
+
+/home/pallasting/.cargo/registry/src/mirrors.ustc.edu.cn-38d0e5eb5da2abae/ppv-lite86-0.2.21/src/lib.rs:
+/home/pallasting/.cargo/registry/src/mirrors.ustc.edu.cn-38d0e5eb5da2abae/ppv-lite86-0.2.21/src/soft.rs:
+/home/pallasting/.cargo/registry/src/mirrors.ustc.edu.cn-38d0e5eb5da2abae/ppv-lite86-0.2.21/src/types.rs:
+/home/pallasting/.cargo/registry/src/mirrors.ustc.edu.cn-38d0e5eb5da2abae/ppv-lite86-0.2.21/src/x86_64/mod.rs:
+/home/pallasting/.cargo/registry/src/mirrors.ustc.edu.cn-38d0e5eb5da2abae/ppv-lite86-0.2.21/src/x86_64/sse2.rs:

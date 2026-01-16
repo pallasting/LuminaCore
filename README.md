@@ -35,15 +35,15 @@ We believe:
 
 ### ⚡ High-Performance Computing
 
-- **Rust-Accelerated Core**: 5-10x performance improvement for matrix multiplication
-- **WDM Multiplexing Support**: Wavelength Division Multiplexing technology, breaking through traditional electronic bottlenecks
-- **Hardware-Aware Optimization**: Automatically adapts to different computing chip configurations
+- **Rust-Accelerated Core (v0.2.0)**: 5-10x performance improvement for matrix multiplication using fused kernels.
+- **WDM Multiplexing Support**: Wavelength Division Multiplexing technology, breaking through traditional electronic bottlenecks.
+- **Hardware-Aware Optimization**: Automatically adapts to different computing chip configurations.
 
 ### 🧠 AI-Native Support
 
-- **PyTorch Compatible**: Seamlessly integrates with existing AI workflows
-- **Automatic Differentiation**: Full support for gradient computation and backpropagation
-- **Noise-Aware Training**: NAT algorithm improves model robustness on photonic hardware
+- **PyTorch Compatible**: Seamlessly integrates with existing AI workflows.
+- **Automatic Differentiation**: Full support for gradient computation and backpropagation (with seamless Rust-to-PyTorch fallback).
+- **Noise-Aware Training**: NAT algorithm improves model robustness on photonic hardware.
 
 ### 🔧 Developer-Friendly
 

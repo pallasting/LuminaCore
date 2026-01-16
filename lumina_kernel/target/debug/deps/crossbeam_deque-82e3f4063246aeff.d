@@ -1,0 +1,8 @@
+/home2rd/pallasting/Documents/RainbowLuminaCore/lumina_kernel/target/debug/deps/crossbeam_deque-82e3f4063246aeff.d: /home2rd/pallasting/Documents/RainbowLuminaCore/lumina_kernel/.cargo_home/registry/src/mirrors.ustc.edu.cn-38d0e5eb5da2abae/crossbeam-deque-0.8.6/src/lib.rs /home2rd/pallasting/Documents/RainbowLuminaCore/lumina_kernel/.cargo_home/registry/src/mirrors.ustc.edu.cn-38d0e5eb5da2abae/crossbeam-deque-0.8.6/src/deque.rs
+
+/home2rd/pallasting/Documents/RainbowLuminaCore/lumina_kernel/target/debug/deps/libcrossbeam_deque-82e3f4063246aeff.rlib: /home2rd/pallasting/Documents/RainbowLuminaCore/lumina_kernel/.cargo_home/registry/src/mirrors.ustc.edu.cn-38d0e5eb5da2abae/crossbeam-deque-0.8.6/src/lib.rs /home2rd/pallasting/Documents/RainbowLuminaCore/lumina_kernel/.cargo_home/registry/src/mirrors.ustc.edu.cn-38d0e5eb5da2abae/crossbeam-deque-0.8.6/src/deque.rs
+
+/home2rd/pallasting/Documents/RainbowLuminaCore/lumina_kernel/target/debug/deps/libcrossbeam_deque-82e3f4063246aeff.rmeta: /home2rd/pallasting/Documents/RainbowLuminaCore/lumina_kernel/.cargo_home/registry/src/mirrors.ustc.edu.cn-38d0e5eb5da2abae/crossbeam-deque-0.8.6/src/lib.rs /home2rd/pallasting/Documents/RainbowLuminaCore/lumina_kernel/.cargo_home/registry/src/mirrors.ustc.edu.cn-38d0e5eb5da2abae/crossbeam-deque-0.8.6/src/deque.rs
+
+/home2rd/pallasting/Documents/RainbowLuminaCore/lumina_kernel/.cargo_home/registry/src/mirrors.ustc.edu.cn-38d0e5eb5da2abae/crossbeam-deque-0.8.6/src/lib.rs:
+/home2rd/pallasting/Documents/RainbowLuminaCore/lumina_kernel/.cargo_home/registry/src/mirrors.ustc.edu.cn-38d0e5eb5da2abae/crossbeam-deque-0.8.6/src/deque.rs:

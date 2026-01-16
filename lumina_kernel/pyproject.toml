@@ -21,5 +21,4 @@ classifiers = [
 ]
 
 [tool.maturin]
-python-source = "python"
 module-name = "lumina_kernel"

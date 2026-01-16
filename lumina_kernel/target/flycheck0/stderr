@@ -1,11 +1,1 @@
-    Updating `ustc` index
-warning: failed to write cache, path: /media/pallasting/SAS-P4-Data/build-cache/cargo/registry/index/mirrors.ustc.edu.cn-38d0e5eb5da2abae/.cache/nd/ar/ndarray, error: Permission denied (os error 13)
- Downloading crates ...
-  Downloaded cfg-if v1.0.4 (registry `ustc`)
-error: failed to download replaced source registry `crates-io`
-
-Caused by:
-  failed to create directory `/media/pallasting/SAS-P4-Data/build-cache/cargo/registry/cache/mirrors.ustc.edu.cn-38d0e5eb5da2abae`
-
-Caused by:
-  Permission denied (os error 13)
+    Finished `dev` profile [unoptimized + debuginfo] target(s) in 0.06s

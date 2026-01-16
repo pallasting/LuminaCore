@@ -20,7 +20,7 @@ impl Quantizer {
     /// * `min_val` - 最小值
     /// * `max_val` - 最大值
     pub fn new(bits: u8, min_val: f32, max_val: f32) -> Self {
-        assert!(bits >= 2 && bits <= 8, "Bits must be in range [2, 8]");
+        assert!(bits >= 1 && bits <= 16, "Bits must be in range [1, 16]");
         assert!(max_val > min_val, "max_val must be greater than min_val");
         
         let levels = (1u32 << bits) - 1; // 2^bits - 1
@@ -54,9 +54,56 @@ impl Quantizer {
         self.min_val + quantized / self.scale
     }
     
-    /// 批量量化（SIMD 优化潜力）
+    /// 批量量化（SIMD 优化版本）
     pub fn quantize_batch(&self, values: &mut [f32]) {
+        #[cfg(target_arch = "x86_64")]
+        {
+            if is_x86_feature_detected!("avx2") {
+                unsafe { self.quantize_batch_avx2(values) };
+                return;
+            }
+        }
+        
+        // 回退到普通循环（编译器仍可能对其进行自动向量化）
         for val in values.iter_mut() {
+            *val = self.quantize(*val);
+        }
+    }
+
+    #[cfg(target_arch = "x86_64")]
+    #[target_feature(enable = "avx2")]
+    unsafe fn quantize_batch_avx2(&self, values: &mut [f32]) {
+        use std::arch::x86_64::*;
+
+        let v_min = _mm256_set1_ps(self.min_val);
+        let v_max = _mm256_set1_ps(self.max_val);
+        let v_scale = _mm256_set1_ps(self.scale);
+        let v_levels = _mm256_set1_ps(self.levels as f32);
+
+        let mut chunks = values.chunks_exact_mut(8);
+        for chunk in &mut chunks {
+            let mut v = _mm256_loadu_ps(chunk.as_ptr());
+            
+            // Clamp
+            v = _mm256_max_ps(v_min, _mm256_min_ps(v_max, v));
+            
+            // Normalize
+            v = _mm256_mul_ps(_mm256_sub_ps(v, v_min), v_scale);
+            
+            // Round (to nearest, ties to even)
+            v = _mm256_round_ps(v, _MM_FROUND_TO_NEAREST_INT | _MM_FROUND_NO_EXC);
+            
+            // Min with levels
+            v = _mm256_min_ps(v, v_levels);
+            
+            // Denormalize
+            v = _mm256_add_ps(v_min, _mm256_div_ps(v, v_scale));
+            
+            _mm256_storeu_ps(chunk.as_mut_ptr(), v);
+        }
+
+        // 处理剩余元素
+        for val in chunks.into_remainder() {
             *val = self.quantize(*val);
         }
     }
