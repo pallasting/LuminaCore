@@ -1,12 +1,29 @@
 use pyo3::prelude::*;
 use numpy::{PyArray2, PyReadonlyArray2, PyReadonlyArray1};
+use num_complex::Complex32;
 
 mod compute;
 mod noise;
 mod quantization;
 mod fused_ops;
+mod runtime;
 
 use fused_ops::{optical_linear_forward, optical_linear_inference};
+use compute::parallel_complex_matmul;
+use runtime::LuminaRuntime;
+
+/// 执行微码指令集
+#[pyfunction]
+fn run_microcode(json_instructions: String) -> PyResult<bool> {
+    let instructions: Vec<serde_json::Value> = serde_json::from_str(&json_instructions)
+        .map_err(|e| PyErr::new::<pyo3::exceptions::PyValueError, _>(e.to_string()))?;
+        
+    let mut rt = LuminaRuntime::new();
+    rt.execute_instructions(instructions)
+        .map_err(|e| PyErr::new::<pyo3::exceptions::PyRuntimeError, _>(e))?;
+        
+    Ok(true)
+}
 
 /// Hello World 测试函数 - 验证 Python-Rust FFI 工作正常
 #[pyfunction]
@@ -18,6 +35,21 @@ fn hello_lumina() -> PyResult<String> {
 #[pyfunction]
 fn version() -> PyResult<String> {
     Ok(env!("CARGO_PKG_VERSION").to_string())
+}
+
+/// 并行复数矩阵乘法
+#[pyfunction]
+fn complex_matmul<'py>(
+    py: Python<'py>,
+    input: PyReadonlyArray2<'py, Complex32>,
+    weight: PyReadonlyArray2<'py, Complex32>,
+) -> PyResult<Bound<'py, PyArray2<Complex32>>> {
+    let input_view = input.as_array();
+    let weight_view = weight.as_array();
+    
+    let output = parallel_complex_matmul(input_view, weight_view);
+    
+    Ok(PyArray2::from_owned_array_bound(py, output))
 }
 
 /// 光子线性层前向传播（融合算子）
@@ -104,6 +136,8 @@ fn lumina_kernel(m: &Bound<'_, PyModule>) -> PyResult<()> {
     m.add_function(wrap_pyfunction!(version, m)?)?;
     m.add_function(wrap_pyfunction!(optical_linear_fused, m)?)?;
     m.add_function(wrap_pyfunction!(optical_linear_infer, m)?)?;
+    m.add_function(wrap_pyfunction!(complex_matmul, m)?)?;
+    m.add_function(wrap_pyfunction!(run_microcode, m)?)?;
     m.add_function(wrap_pyfunction!(optical_linear_backward_kernel, m)?)?;
     Ok(())
 }

@@ -5,5 +5,11 @@ Lumina Core Module - 核心系统组件
 """
 
 from .digital_twin import PhotonicChipDigitalTwin, PhysicalState, PredictionResult
+from .calibration import LuminaCalibrationPipeline
 
-__all__ = ["PhotonicChipDigitalTwin", "PhysicalState", "PredictionResult"]
+__all__ = [
+    "PhotonicChipDigitalTwin", 
+    "PhysicalState", 
+    "PredictionResult",
+    "LuminaCalibrationPipeline"
+]

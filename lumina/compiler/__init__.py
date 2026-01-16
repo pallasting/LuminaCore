@@ -1,8 +1,11 @@
 """
 LuminaFlow 编译器模块
 
-将权重导出为芯片可读的 LUT/Config（v0.2 计划中）
+负责模型量化、WDM 资源规划以及静态执行图导出。
 """
 
-# 占位符：v0.2 版本将实现
-__all__ = []
+from .quantizer import WeightQuantizer
+from .planner import WDMPlanner
+from .exporter import ConfigExporter, LuminaExporter
+
+__all__ = ["WeightQuantizer", "WDMPlanner", "ConfigExporter", "LuminaExporter"]

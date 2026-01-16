@@ -1,5 +1,6 @@
 use ndarray::{Array2, ArrayView2, Axis};
 use rayon::prelude::*;
+use num_complex::Complex32;
 
 /// 计算两个向量的点积（SIMD 优化）
 pub fn dot_product(a: &[f32], b: &[f32]) -> f32 {
@@ -12,6 +13,19 @@ pub fn dot_product(a: &[f32], b: &[f32]) -> f32 {
     
     // 回退到自动向量化友好的循环
     a.iter().zip(b.iter()).map(|(x, y)| x * y).sum()
+}
+
+/// 计算两个复数向量的点积
+pub fn complex_dot_product(a: &[Complex32], b: &[Complex32]) -> Complex32 {
+    let mut sum_re = 0.0;
+    let mut sum_im = 0.0;
+    
+    for (x, y) in a.iter().zip(b.iter()) {
+        sum_re += x.re * y.re - x.im * y.im;
+        sum_im += x.re * y.im + x.im * y.re;
+    }
+    
+    Complex32::new(sum_re, sum_im)
 }
 
 #[cfg(target_arch = "x86_64")]
@@ -74,6 +88,31 @@ pub fn parallel_matmul(input: ArrayView2<f32>, weight: ArrayView2<f32>) -> Array
                 output_row[j] = dot_product(input_slice, weight_slice);
             }
         });
+    
+    output
+}
+
+/// 并行复数矩阵乘法
+pub fn parallel_complex_matmul(input: ArrayView2<Complex32>, weight: ArrayView2<Complex32>) -> Array2<Complex32> {
+    let a = input.mapv(|c| c.re);
+    let b = input.mapv(|c| c.im);
+    let c = weight.mapv(|c| c.re);
+    let d = weight.mapv(|c| c.im);
+    
+    let ac_t = a.dot(&c.t());
+    let bd_t = b.dot(&d.t());
+    let ad_t = a.dot(&d.t());
+    let bc_t = b.dot(&c.t());
+    
+    let real_part = ac_t - bd_t;
+    let imag_part = ad_t + bc_t;
+    
+    let mut output = Array2::<Complex32>::zeros(real_part.dim());
+    for i in 0..output.nrows() {
+        for j in 0..output.ncols() {
+            output[[i, j]] = Complex32::new(real_part[[i, j]], imag_part[[i, j]]);
+        }
+    }
     
     output
 }
