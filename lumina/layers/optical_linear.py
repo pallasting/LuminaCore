@@ -30,6 +30,57 @@ except ImportError:
 USE_RUST_BACKEND = os.environ.get("LUMINA_USE_RUST", "0") == "1" and _RUST_BACKEND_AVAILABLE
 
 
+class OpticalLinearFunction(torch.autograd.Function):
+    """
+    自定义 Autograd 函数，桥接 Rust 算子的前向和反向传播
+    """
+    @staticmethod
+    def forward(ctx, input, weight, bias, noise_level, precision, training):
+        ctx.save_for_backward(input, weight, bias)
+        
+        input_np = input.detach().cpu().numpy()
+        weight_np = weight.detach().cpu().numpy()
+        bias_np = bias.detach().cpu().numpy() if bias is not None else None
+        
+        if training:
+            output_np = lumina_kernel.optical_linear_fused(
+                input_np, weight_np, bias_np,
+                noise_std=noise_level,
+                bits=precision,
+                seed=np.random.randint(0, 2**32)
+            )
+        else:
+            output_np = lumina_kernel.optical_linear_infer(
+                input_np, weight_np, bias_np,
+                bits=precision
+            )
+            
+        return torch.from_numpy(output_np).to(input.device)
+
+    @staticmethod
+    def backward(ctx, grad_output):
+        input, weight, bias = ctx.saved_tensors
+        
+        # 转换为 NumPy
+        grad_output_np = grad_output.detach().cpu().numpy()
+        input_np = input.detach().cpu().numpy()
+        weight_np = weight.detach().cpu().numpy()
+        
+        # 调用 Rust 反向传播内核
+        grad_input_np, grad_weight_np = lumina_kernel.optical_linear_backward_kernel(
+            grad_output_np, input_np, weight_np
+        )
+        
+        grad_input = torch.from_numpy(grad_input_np).to(input.device)
+        grad_weight = torch.from_numpy(grad_weight_np).to(weight.device)
+        
+        grad_bias = None
+        if bias is not None:
+            grad_bias = grad_output.sum(dim=0)
+            
+        return grad_input, grad_weight, grad_bias, None, None, None
+
+
 class OpticalLinear(nn.Module):
     """
     模拟光子芯片的光学全连接层
@@ -136,7 +187,7 @@ class OpticalLinear(nn.Module):
             raise ValidationError(f"Input must be a torch.Tensor, got {type(x)}")
 
         if x.dim() < 2:
-            raise ValidationError(f"Input tensor must be at least 2-dimensional, got shape {x.shape}")
+            raise ValidationError(f"Input tensor must be 2-dimensional, got shape {x.shape}")
 
         if x.shape[-1] != self.in_features:
             raise ValidationError(f"Input feature dimension {x.shape[-1]} does not match expected {self.in_features}")
@@ -297,7 +348,11 @@ class OpticalLinear(nn.Module):
 
         # Rust 后端快速路径（如果启用且可用）
         if USE_RUST_BACKEND and not torch.is_complex(x):
-            output = self._forward_rust(x)
+            # 使用自定义 Autograd 函数桥接 Rust 后端（支持梯度回传）
+            return OpticalLinearFunction.apply(
+                x, self.weight, self.bias, 
+                self.noise_level, self.precision, self.training
+            )
         else:
             # PyTorch 标准路径
             # Step 1: DAC 转换（输入量化）
@@ -356,6 +411,13 @@ class OpticalLinear(nn.Module):
         # 转换回 PyTorch
         output = torch.from_numpy(output_np).to(x.device)
         
+        # 修复：Rust 路径目前不支持自动微分，必须确保在训练模式下保持计算图
+        # 如果需要支持训练，应回退到 PyTorch 路径，除非实现了 Rust 自定义算子的 backward
+        if x.requires_grad or self.weight.requires_grad:
+            # 这种方式只是占位，实际梯度无法流向输入和权重
+            # 在 NAT 训练中，由于调用了 _forward_rust，梯度流断裂
+            pass
+            
         return output
 
     def forward_optimized(

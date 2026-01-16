@@ -40,23 +40,18 @@ flake8 lumina/ tests/
 ````bash
 cd lumina_kernel
 
-# 开发构建（快速编译）
-maturin develop
-
-# 发布构建（优化性能）
+# 确保 Python 3.13 环境 (PyO3 0.23 要求)
+# 开发构建（快速编译并安装到当前环境）
 maturin develop --release
 
-# 构建 wheel 包
+# 发布构建（优化性能，生成 Wheel）
 maturin build --release
 
-# 运行 Rust 测试
+# 运行 Rust 单元测试
 cargo test
 
-# FFI 测试
-python test_ffi.py
-
-# 性能基准测试
-cargo bench
+# FFI 连接验证
+python ../test_rust_ffi.py
 ````
 
 ### React 前端 (frontend/)

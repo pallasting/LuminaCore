@@ -1,0 +1,10 @@
+/home/pallasting/ 文档/RainbowLuminaCore/lumina_kernel/target/debug/deps/rand_core-1581d40e8904c780.d: /home/pallasting/.cargo/registry/src/mirrors.ustc.edu.cn-38d0e5eb5da2abae/rand_core-0.6.4/src/lib.rs /home/pallasting/.cargo/registry/src/mirrors.ustc.edu.cn-38d0e5eb5da2abae/rand_core-0.6.4/src/block.rs /home/pallasting/.cargo/registry/src/mirrors.ustc.edu.cn-38d0e5eb5da2abae/rand_core-0.6.4/src/error.rs /home/pallasting/.cargo/registry/src/mirrors.ustc.edu.cn-38d0e5eb5da2abae/rand_core-0.6.4/src/impls.rs /home/pallasting/.cargo/registry/src/mirrors.ustc.edu.cn-38d0e5eb5da2abae/rand_core-0.6.4/src/le.rs /home/pallasting/.cargo/registry/src/mirrors.ustc.edu.cn-38d0e5eb5da2abae/rand_core-0.6.4/src/os.rs
+
+/home/pallasting/ 文档/RainbowLuminaCore/lumina_kernel/target/debug/deps/librand_core-1581d40e8904c780.rmeta: /home/pallasting/.cargo/registry/src/mirrors.ustc.edu.cn-38d0e5eb5da2abae/rand_core-0.6.4/src/lib.rs /home/pallasting/.cargo/registry/src/mirrors.ustc.edu.cn-38d0e5eb5da2abae/rand_core-0.6.4/src/block.rs /home/pallasting/.cargo/registry/src/mirrors.ustc.edu.cn-38d0e5eb5da2abae/rand_core-0.6.4/src/error.rs /home/pallasting/.cargo/registry/src/mirrors.ustc.edu.cn-38d0e5eb5da2abae/rand_core-0.6.4/src/impls.rs /home/pallasting/.cargo/registry/src/mirrors.ustc.edu.cn-38d0e5eb5da2abae/rand_core-0.6.4/src/le.rs /home/pallasting/.cargo/registry/src/mirrors.ustc.edu.cn-38d0e5eb5da2abae/rand_core-0.6.4/src/os.rs
+
+/home/pallasting/.cargo/registry/src/mirrors.ustc.edu.cn-38d0e5eb5da2abae/rand_core-0.6.4/src/lib.rs:
+/home/pallasting/.cargo/registry/src/mirrors.ustc.edu.cn-38d0e5eb5da2abae/rand_core-0.6.4/src/block.rs:
+/home/pallasting/.cargo/registry/src/mirrors.ustc.edu.cn-38d0e5eb5da2abae/rand_core-0.6.4/src/error.rs:
+/home/pallasting/.cargo/registry/src/mirrors.ustc.edu.cn-38d0e5eb5da2abae/rand_core-0.6.4/src/impls.rs:
+/home/pallasting/.cargo/registry/src/mirrors.ustc.edu.cn-38d0e5eb5da2abae/rand_core-0.6.4/src/le.rs:
+/home/pallasting/.cargo/registry/src/mirrors.ustc.edu.cn-38d0e5eb5da2abae/rand_core-0.6.4/src/os.rs:

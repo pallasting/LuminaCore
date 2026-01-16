@@ -1,16 +1,50 @@
 use ndarray::{Array2, ArrayView2, Axis};
 use rayon::prelude::*;
 
+/// 计算两个向量的点积（SIMD 优化）
+pub fn dot_product(a: &[f32], b: &[f32]) -> f32 {
+    #[cfg(target_arch = "x86_64")]
+    {
+        if is_x86_feature_detected!("avx2") {
+            return unsafe { dot_product_avx2(a, b) };
+        }
+    }
+    
+    // 回退到自动向量化友好的循环
+    a.iter().zip(b.iter()).map(|(x, y)| x * y).sum()
+}
+
+#[cfg(target_arch = "x86_64")]
+#[target_feature(enable = "avx2")]
+unsafe fn dot_product_avx2(a: &[f32], b: &[f32]) -> f32 {
+    use std::arch::x86_64::*;
+
+    let len = a.len();
+    let mut sum = _mm256_setzero_ps();
+    
+    let mut i = 0;
+    while i + 8 <= len {
+        let va = _mm256_loadu_ps(a.as_ptr().add(i));
+        let vb = _mm256_loadu_ps(b.as_ptr().add(i));
+        sum = _mm256_fmadd_ps(va, vb, sum);
+        i += 8;
+    }
+    
+    // 归约 256 位向量到单个 f32
+    let mut res = [0.0f32; 8];
+    _mm256_storeu_ps(res.as_mut_ptr(), sum);
+    let mut final_sum: f32 = res.iter().sum();
+    
+    // 处理剩余元素
+    while i < len {
+        final_sum += a[i] * b[i];
+        i += 1;
+    }
+    
+    final_sum
+}
+
 /// 并行矩阵乘法
-/// 
-/// 使用 Rayon 按行并行计算，避免不必要的内存分配
-/// 
-/// # Arguments
-/// * `input` - 输入矩阵 [batch_size, in_features]
-/// * `weight` - 权重矩阵 [out_features, in_features]
-/// 
-/// # Returns
-/// 输出矩阵 [batch_size, out_features]
 pub fn parallel_matmul(input: ArrayView2<f32>, weight: ArrayView2<f32>) -> Array2<f32> {
     let batch_size = input.nrows();
     let out_features = weight.nrows();
@@ -33,15 +67,11 @@ pub fn parallel_matmul(input: ArrayView2<f32>, weight: ArrayView2<f32>) -> Array
         .into_par_iter()
         .zip(input.axis_iter(Axis(0)).into_par_iter())
         .for_each(|(mut output_row, input_row)| {
+            let input_slice = input_row.as_slice().unwrap();
             // 对每个输出特征
             for (j, weight_row) in weight.axis_iter(Axis(0)).enumerate() {
-                // 计算点积: output[i][j] = sum(input[i][k] * weight[j][k])
-                let dot_product: f32 = input_row
-                    .iter()
-                    .zip(weight_row.iter())
-                    .map(|(a, b)| a * b)
-                    .sum();
-                output_row[j] = dot_product;
+                let weight_slice = weight_row.as_slice().unwrap();
+                output_row[j] = dot_product(input_slice, weight_slice);
             }
         });
     
