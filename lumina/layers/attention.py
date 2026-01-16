@@ -1,8 +1,12 @@
 import torch
 import torch.nn as nn
 import torch.nn.functional as F
-from typing import Optional, Tuple
+from typing import Optional, Tuple, Literal
 from .optical_linear import OpticalLinear
+from ..exceptions import InvalidParameterError
+
+# 定义有效的硬件配置类型
+HardwareProfile = Literal['lumina_nano_v1', 'lumina_micro_v1', 'edge_ultra_low_power', 'datacenter_high_precision', 'custom']
 
 class OpticalAttention(nn.Module):
     """
@@ -27,7 +31,7 @@ class OpticalAttention(nn.Module):
         num_heads: int,
         dropout: float = 0.0,
         bias: bool = True,
-        hardware_profile: str = "lumina_nano_v1",
+        hardware_profile: HardwareProfile = "lumina_nano_v1",
     ):
         super().__init__()
         self.embed_dim = embed_dim
@@ -36,14 +40,14 @@ class OpticalAttention(nn.Module):
         self.head_dim = embed_dim // num_heads
         
         if self.head_dim * num_heads != self.embed_dim:
-            raise ValueError(f"embed_dim must be divisible by num_heads (got {embed_dim} and {num_heads})")
+            raise InvalidParameterError(f"embed_dim must be divisible by num_heads (got {embed_dim} and {num_heads})")
 
         # Optical Projections
         # We use separate layers for Q, K, V to allow for physical parallelization (WDM channels)
-        self.q_proj = OpticalLinear(embed_dim, embed_dim, bias=bias, hardware_profile=hardware_profile)
-        self.k_proj = OpticalLinear(embed_dim, embed_dim, bias=bias, hardware_profile=hardware_profile)
-        self.v_proj = OpticalLinear(embed_dim, embed_dim, bias=bias, hardware_profile=hardware_profile)
-        self.out_proj = OpticalLinear(embed_dim, embed_dim, bias=bias, hardware_profile=hardware_profile)
+        self.q_proj = OpticalLinear(embed_dim, embed_dim, bias=bias, hardware_profile=hardware_profile)  # type: ignore[arg-type]
+        self.k_proj = OpticalLinear(embed_dim, embed_dim, bias=bias, hardware_profile=hardware_profile)  # type: ignore[arg-type]
+        self.v_proj = OpticalLinear(embed_dim, embed_dim, bias=bias, hardware_profile=hardware_profile)  # type: ignore[arg-type]
+        self.out_proj = OpticalLinear(embed_dim, embed_dim, bias=bias, hardware_profile=hardware_profile)  # type: ignore[arg-type]
 
     def forward(
         self,

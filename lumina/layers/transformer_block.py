@@ -1,8 +1,9 @@
 import torch
 import torch.nn as nn
-from typing import Optional, Tuple
+from typing import Optional, Tuple, Literal
 from .optical_linear import OpticalLinear
-from .attention import OpticalAttention
+from .attention import OpticalAttention, HardwareProfile
+from ..exceptions import InvalidParameterError
 
 class OpticalTransformerBlock(nn.Module):
     """
@@ -35,7 +36,7 @@ class OpticalTransformerBlock(nn.Module):
         mlp_ratio: float = 4.0,
         dropout: float = 0.1,
         activation: str = "gelu",
-        hardware_profile: str = "lumina_nano_v1",
+        hardware_profile: HardwareProfile = "lumina_nano_v1",
         bias: bool = True
     ):
         super().__init__()

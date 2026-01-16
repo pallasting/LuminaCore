@@ -196,6 +196,10 @@ We are looking for contributors with the following backgrounds:
 
 ## 📰 Latest Updates
 
+- **2026.01.16**: **RainbowLuminaCore v0.4.0 Released** - Introduced Photonic HAL (Hardware Abstraction Layer) and Distributed Multi-Tile Inference.
+  - 🚀 **Distributed Llama Inference**: Support for splitting large models across multiple photonic tiles.
+  - 📱 **HAL Infrastructure**: Unified interface for heterogeneous photonic hardware.
+  - ⚡ **Pipeline Parallelism**: Optimized execution flow for high-throughput AI inference.
 - **2025.12.15**: Released LuminaFlow v0.1.0, supporting basic photonic layers and NAT training
 - **2025.12.08**: Open-sourced core algorithms, implementing WDM multiplexed photonic computing
 - **2025.11.20**: Completed digital twin system, supporting real-time hardware monitoring

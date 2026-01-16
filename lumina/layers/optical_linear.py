@@ -15,7 +15,7 @@ import torch.nn.functional as F
 from typing_extensions import Literal
 
 from .optical_components import HardwareConfig, Quantizer, NoiseModel
-from ..exceptions import InvalidParameterError, ValidationError, BoundaryError, OpticalComponentError
+from ..exceptions import InvalidParameterError, ValidationError, BoundaryError
 
 # 尝试导入 Rust 后端
 _RUST_BACKEND_AVAILABLE = False
@@ -592,3 +592,41 @@ class OpticalLinear(nn.Module):
             f"noise_level={self.noise_level:.2%}, "
             f"wdm={self.enable_wdm}"
         )
+
+    def compile_to_hardware(self) -> Dict[str, Any]:
+        """
+        将当前层编译为硬件可执行格式。
+        
+        包含：
+        - 权重量化 LUT
+        - WDM 映射表（如果启用）
+        - 硬件配置元数据
+        """
+        from ..compiler.quantizer import WeightQuantizer
+        from ..compiler.planner import WDMPlanner
+        from .wdm_mapping import WDMChannelMapper
+
+        # 1. 权重量化
+        quantizer = WeightQuantizer(self.hardware_config)
+        lut = quantizer.generate_lut(self.weight.data)
+
+        # 2. WDM 规划 (如果启用)
+        wdm_data = None
+        if self.enable_wdm:
+            mapper = WDMChannelMapper(num_channels=min(self.in_features, 16))
+            planner = WDMPlanner(mapper.num_channels)
+            wdm_data = planner.export_mapping_table(mapper)
+
+        return {
+            "type": "OpticalLinear",
+            "layer_id": id(self),
+            "hardware_profile": self.hardware_profile,
+            "lut": lut,
+            "wdm": wdm_data,
+            "config": {
+                "in_features": self.in_features,
+                "out_features": self.out_features,
+                "precision": self.precision,
+                "noise_level": self.noise_level
+            }
+        }

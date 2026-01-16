@@ -15,6 +15,8 @@ import torch
 import torch.nn as nn
 import torch.nn.functional as F
 
+from ..exceptions import InvalidParameterError, ValidationError
+
 
 class WDMChannelMapper(nn.Module):
     """
@@ -368,7 +370,7 @@ class WDMChannelMapper(nn.Module):
             mapped = self.map_to_channels(x)
             return self.combine_channels(mapped)
         else:
-            raise ValueError(f"Unknown mode: {mode}. Use 'map', 'combine', or 'both'")
+            raise InvalidParameterError(f"Unknown mode: {mode}. Use 'map', 'combine', or 'both'")
 
     def forward_integrated(
         self, x: torch.Tensor, optical_linear_module

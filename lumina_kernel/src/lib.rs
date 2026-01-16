@@ -7,6 +7,7 @@ mod noise;
 mod quantization;
 mod fused_ops;
 mod runtime;
+mod hal;
 
 use fused_ops::{optical_linear_forward, optical_linear_inference};
 use compute::parallel_complex_matmul;
@@ -14,15 +15,34 @@ use runtime::LuminaRuntime;
 
 /// 执行微码指令集
 #[pyfunction]
-fn run_microcode(json_instructions: String) -> PyResult<bool> {
+#[pyo3(signature = (json_instructions, device_name=None))]
+fn run_microcode(json_instructions: String, device_name: Option<String>) -> PyResult<bool> {
     let instructions: Vec<serde_json::Value> = serde_json::from_str(&json_instructions)
         .map_err(|e| PyErr::new::<pyo3::exceptions::PyValueError, _>(e.to_string()))?;
         
-    let mut rt = LuminaRuntime::new();
+    let mut rt = LuminaRuntime::new(device_name)
+        .map_err(|e| PyErr::new::<pyo3::exceptions::PyRuntimeError, _>(e))?;
+        
     rt.execute_instructions(instructions)
         .map_err(|e| PyErr::new::<pyo3::exceptions::PyRuntimeError, _>(e))?;
         
     Ok(true)
+}
+
+/// 列出可用设备
+#[pyfunction]
+fn list_devices() -> PyResult<Vec<String>> {
+    let manager = crate::hal::manager::DeviceManager::instance();
+    Ok(manager.list_devices())
+}
+
+/// 创建模拟设备
+#[pyfunction]
+fn create_mock_device(name: String, memory_limit: usize) -> PyResult<()> {
+    let mut manager = crate::hal::manager::DeviceManager::instance();
+    manager.create_mock_device(&name, memory_limit)
+        .map_err(|e| PyErr::new::<pyo3::exceptions::PyRuntimeError, _>(e.to_string()))?;
+    Ok(())
 }
 
 /// Hello World 测试函数 - 验证 Python-Rust FFI 工作正常
@@ -138,6 +158,8 @@ fn lumina_kernel(m: &Bound<'_, PyModule>) -> PyResult<()> {
     m.add_function(wrap_pyfunction!(optical_linear_infer, m)?)?;
     m.add_function(wrap_pyfunction!(complex_matmul, m)?)?;
     m.add_function(wrap_pyfunction!(run_microcode, m)?)?;
+    m.add_function(wrap_pyfunction!(list_devices, m)?)?;
+    m.add_function(wrap_pyfunction!(create_mock_device, m)?)?;
     m.add_function(wrap_pyfunction!(optical_linear_backward_kernel, m)?)?;
     Ok(())
 }

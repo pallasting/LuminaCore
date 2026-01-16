@@ -9,7 +9,7 @@ from typing import Dict, Union
 import torch
 import torch.nn as nn
 
-from ..exceptions import InvalidParameterError, ValidationError, BoundaryError
+from ..exceptions import InvalidParameterError, ValidationError
 
 
 # 硬件配置预设（类级别定义）

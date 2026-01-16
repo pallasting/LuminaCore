@@ -11,7 +11,7 @@ Digital Twin System - 光子芯片数字孪生系统
 import time
 from collections import deque
 from dataclasses import dataclass
-from typing import Any, Dict, List, Optional, Tuple
+from typing import Any, Dict, List, Optional, Tuple, Deque
 
 import numpy as np
 import torch
@@ -19,6 +19,7 @@ import torch.nn as nn
 
 from lumina.layers.optical_linear import OpticalLinear
 from lumina.layers.wdm_mapping import WDMChannelMapper
+from lumina.exceptions import InvalidParameterError, ValidationError
 
 
 @dataclass
@@ -75,11 +76,11 @@ class PhotonicChipDigitalTwin:
         self.prediction_horizon = prediction_horizon
 
         # 历史数据存储
-        self.state_history = deque(maxlen=monitoring_window)
-        self.performance_history = deque(maxlen=monitoring_window)
+        self.state_history: Deque[PhysicalState] = deque(maxlen=monitoring_window)
+        self.performance_history: Deque[Dict[str, float]] = deque(maxlen=monitoring_window)
 
         # 当前状态
-        self.current_state = None
+        self.current_state: Optional[PhysicalState] = None
         self.last_update_time = time.time()
 
         # 预测模型（简单的线性趋势预测）
@@ -100,7 +101,7 @@ class PhotonicChipDigitalTwin:
 
         # 预警状态
         self.alert_level = "NORMAL"  # NORMAL, WARNING, CRITICAL
-        self.active_alerts = []
+        self.active_alerts: List[str] = []
 
     def _initialize_predictors(self):
         """初始化预测模型"""
@@ -491,7 +492,7 @@ class PhotonicChipDigitalTwin:
         Returns:
             优化建议
         """
-        optimizations = {}
+        optimizations: Dict[str, Dict[str, Any]] = {}
 
         # 温度优化
         if self.current_state and self.current_state.temperature > 50:

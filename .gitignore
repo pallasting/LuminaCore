@@ -40,3 +40,9 @@ input.txt
 
 # Artifacts
 gpt_robustness.png
+target/
+lumina_kernel/target/
+.venv/
+*.so
+*.whl
+lumina_kernel/.cargo_home/

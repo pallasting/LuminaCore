@@ -1,8 +1,10 @@
 import torch
 import torch.nn as nn
-from typing import Optional, Tuple
+from typing import Optional, Tuple, Literal
 from ..layers.transformer_block import OpticalTransformerBlock
 from ..layers.optical_linear import OpticalLinear
+from ..layers.attention import HardwareProfile
+from ..exceptions import InvalidParameterError
 
 class OpticalGPT(nn.Module):
     """
@@ -40,7 +42,7 @@ class OpticalGPT(nn.Module):
         mlp_ratio: float = 4.0,
         dropout: float = 0.1,
         activation: str = "gelu",
-        hardware_profile: str = "lumina_nano_v1",
+        hardware_profile: HardwareProfile = "lumina_nano_v1",
         bias: bool = True
     ):
         super().__init__()
@@ -113,7 +115,7 @@ class OpticalGPT(nn.Module):
         b, t = idx.size()
         
         if t > self.max_seq_len:
-            raise ValueError(f"Cannot forward sequence of length {t}, block size is only {self.max_seq_len}")
+            raise InvalidParameterError(f"Cannot forward sequence of length {t}, block size is only {self.max_seq_len}")
         
         # 1. Embeddings
         pos = torch.arange(0, t, dtype=torch.long, device=device) # [t]

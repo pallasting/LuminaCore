@@ -9,7 +9,6 @@
 - 材料老化
 """
 
-import random
 from dataclasses import dataclass
 from typing import Any, Dict, List, Optional, Tuple
 
@@ -108,22 +107,22 @@ class ThermalEnvironmentalModel(nn.Module):
     ) -> torch.Tensor:
         """计算热应力"""
         # 热膨胀导致的应力
-        stress = self.thermal_expansion_coeff * abs(temperature - 25.0) * self.chip_area
-        stress += self.temperature_gradient_sensitivity * gradient
+        stress = self.thermal_expansion_coeff * torch.tensor(abs(temperature - 25.0), dtype=torch.float32) * self.chip_area
+        stress += self.temperature_gradient_sensitivity * torch.tensor(gradient, dtype=torch.float32)
 
-        return torch.tensor(stress, dtype=torch.float32)
+        return stress
 
     def _calculate_thermal_noise(self, temperature: float) -> torch.Tensor:
         """计算热噪声"""
-        # 约翰逊噪声
-        johnson_noise = self.johnson_noise_coeff * np.sqrt(temperature + 273.15)
+        # 约翰逊噪声（与温度成正比的噪声）
+        johnson_noise = self.johnson_noise_coeff * torch.sqrt(torch.tensor(temperature + 273.15, dtype=torch.float32))
 
-        # 热起伏噪声
-        thermal_fluctuation = self.thermal_fluctuation_coeff * (temperature - 25.0)
+        # 热起伏噪声（温度偏离25°C的影响）
+        thermal_fluctuation = self.thermal_fluctuation_coeff * torch.tensor(temperature - 25.0, dtype=torch.float32)
 
         total_noise = johnson_noise + thermal_fluctuation
 
-        return torch.tensor(total_noise, dtype=torch.float32)
+        return total_noise
 
     def _calculate_temperature_drift(
         self, temperature: float, gradient: float, time_step: float
@@ -218,10 +217,10 @@ class HumidityEnvironmentalModel(nn.Module):
         """计算水分吸收"""
         # 基于Fick定律的扩散模型
         diffusion_coeff = self.material_permeability * torch.exp(
-            -0.5 / (temperature + 273.15)
+            -0.5 / torch.tensor(temperature + 273.15, dtype=torch.float32)
         )
         absorption = (
-            diffusion_coeff * humidity * np.sqrt(exposure_time) * self.surface_area
+            diffusion_coeff * torch.tensor(humidity, dtype=torch.float32) * torch.sqrt(torch.tensor(exposure_time, dtype=torch.float32)) * self.surface_area
         )
 
         return absorption * self.moisture_absorption_coeff
@@ -232,7 +231,7 @@ class HumidityEnvironmentalModel(nn.Module):
         """计算表面导电性"""
         # 湿度导致的表面导电性增加
         conductivity = (
-            self.surface_conductivity_coeff * humidity * torch.exp(temperature / 50.0)
+            self.surface_conductivity_coeff * torch.tensor(humidity, dtype=torch.float32) * torch.exp(torch.tensor(temperature / 50.0, dtype=torch.float32))
         )
 
         return conductivity
@@ -243,7 +242,7 @@ class HumidityEnvironmentalModel(nn.Module):
         """计算腐蚀效应"""
         # 湿度加速腐蚀
         corrosion_rate = (
-            self.corrosion_rate_coeff * humidity * torch.exp(temperature / 30.0)
+            self.corrosion_rate_coeff * humidity * torch.exp(torch.tensor(temperature / 30.0, dtype=torch.float32))
         )
         corrosion = corrosion_rate * exposure_time
 
@@ -352,7 +351,7 @@ class VibrationEnvironmentalModel(nn.Module):
     ) -> torch.Tensor:
         """计算应力效应"""
         # 振动应力
-        acceleration = (2 * np.pi * frequency) ** 2 * amplitude
+        acceleration = (2 * torch.tensor(np.pi, dtype=torch.float32) * frequency) ** 2 * amplitude
         stress = acceleration * 1000  # 简化的应力计算
 
         return torch.tensor(stress, dtype=torch.float32)
@@ -446,9 +445,9 @@ class EMIEnvironmentalModel(nn.Module):
     ) -> torch.Tensor:
         """计算串扰感应"""
         # EMI导致的通道间串扰
-        crosstalk = self.crosstalk_induction_coeff * emi_strength * np.sqrt(frequency)
+        crosstalk = self.crosstalk_induction_coeff * torch.tensor(emi_strength, dtype=torch.float32) * torch.sqrt(torch.tensor(frequency, dtype=torch.float32))
 
-        return torch.tensor(crosstalk, dtype=torch.float32)
+        return crosstalk
 
     def _calculate_shielding_effect(self, distance: float) -> torch.Tensor:
         """计算屏蔽效果"""
@@ -534,16 +533,16 @@ class RadiationEnvironmentalModel(nn.Module):
     ) -> torch.Tensor:
         """计算暗电流增加"""
         # 辐射诱导的暗电流
-        dark_current = self.dark_current_coeff * dose * np.sqrt(exposure_time)
+        dark_current = self.dark_current_coeff * torch.tensor(dose, dtype=torch.float32) * torch.sqrt(torch.tensor(exposure_time, dtype=torch.float32))
 
-        return torch.tensor(dark_current, dtype=torch.float32)
+        return dark_current
 
     def _calculate_material_degradation(
         self, dose: float, exposure_time: float
     ) -> torch.Tensor:
         """计算材料退化"""
         # 综合退化模型
-        degradation = 1.0 - torch.exp(-dose * exposure_time / 1e6)
+        degradation = 1.0 - torch.exp(torch.tensor(-dose * exposure_time / 1e6, dtype=torch.float32))
 
         return torch.clamp(degradation, 0.0, 1.0)
 

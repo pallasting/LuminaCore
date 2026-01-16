@@ -3,65 +3,50 @@ import torch
 import lumina as lnn
 import time
 import numpy as np
-import torch.nn.functional as F
-from lumina.nn import OpticalLinear
-import os
 
 def benchmark_optical_vs_linear():
     """对比光子层与传统PyTorch层的性能"""
     
-    # 增大尺寸以体现 Rust 后端优势
-    in_dim = 1024
-    out_dim = 1024
-    
     # 创建层
-    optical_layer = OpticalLinear(in_dim, out_dim, hardware_profile="datacenter_high_precision")
+    optical_layer = lnn.OpticalLinear(784, 256, hardware_profile="datacenter_high_precision")
+    torch_layer = torch.nn.Linear(784, 256)
     
-    # 定义 PyTorch 路径的模拟过程 (包含噪声和量化)
-    def pytorch_full_sim(x, layer):
-        with torch.no_grad():
-            # 1. DAC
-            x_q = layer.dac_convert(x)
-            # 2. Matmul + Noise
-            y = F.linear(x_q, layer.weight, None)
-            y_n = layer.noise_model.apply_noise(y, True)
-            # 3. ADC
-            y_out = layer.adc_convert(y_n)
-            return y_out
-
+    # 使用相同的权重
+    with torch.no_grad():
+        torch_layer.weight.copy_(optical_layer.weight)
+        if optical_layer.bias is not None:
+            torch_layer.bias.copy_(optical_layer.bias)
+    
     # 测试数据
-    batch_sizes = [32, 64, 128]
-    num_iterations = 20
+    batch_sizes = [1, 8, 32, 64, 128]
+    num_iterations = 100
     
-    print("📊 性能基准测试 (训练模式：包含噪声与量化)")
-    print("=" * 70)
-    print(f"{'Batch Size':<12} {'Rust Fused (ms)':<18} {'PyTorch Full (ms)':<18} {'Speedup':<10}")
-    print("-" * 70)
+    print("📊 性能基准测试")
+    print("=" * 60)
+    print(f"{'Batch Size':<12} {'Optical (ms)':<15} {'Torch (ms)':<15} {'Speedup':<10}")
+    print("-" * 60)
     
     for batch_size in batch_sizes:
-        x = torch.randn(batch_size, in_dim)
+        x = torch.randn(batch_size, 784)
         
-        # 1. Rust 融合算子测试
-        # 确保在训练模式下，但我们手动调用 _forward_rust 来测试它
-        # 因为 OpticalLinear.forward 目前在 training=True 时会回退
-        os.environ["LUMINA_USE_RUST"] = "1"
+        # 光子层测试
         torch.cuda.synchronize() if torch.cuda.is_available() else None
         start = time.time()
         for _ in range(num_iterations):
-            y_rust = optical_layer._forward_rust(x)
+            y_optical = optical_layer(x)
         torch.cuda.synchronize() if torch.cuda.is_available() else None
-        rust_time = (time.time() - start) * 1000 / num_iterations
+        optical_time = (time.time() - start) * 1000 / num_iterations
         
-        # 2. PyTorch 全模拟路径测试
+        # PyTorch层测试
         torch.cuda.synchronize() if torch.cuda.is_available() else None
         start = time.time()
         for _ in range(num_iterations):
-            y_torch = pytorch_full_sim(x, optical_layer)
+            y_torch = torch_layer(x)
         torch.cuda.synchronize() if torch.cuda.is_available() else None
         torch_time = (time.time() - start) * 1000 / num_iterations
         
-        speedup = torch_time / rust_time
-        print(f"{batch_size:<12} {rust_time:<18.3f} {torch_time:<18.3f} {speedup:<10.2f}x")
+        speedup = torch_time / optical_time
+        print(f"{batch_size:<12} {optical_time:<15.3f} {torch_time:<15.3f} {speedup:<10.2f}x")
     
     print("\n🎉 基准测试完成！")
 
