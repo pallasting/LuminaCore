@@ -38,6 +38,8 @@ lumina_kernel/README.md
 lumina_kernel/test_ffi.py
 lumina_kernel/target/debug/build/pyo3-build-config-3f1d28e4eab027fe/out/pyo3-build-config-file.txt
 lumina_kernel/target/debug/build/pyo3-build-config-3f1d28e4eab027fe/out/pyo3-build-config.txt
+lumina_kernel/target/debug/build/pyo3-build-config-f7fce20681a04a66/out/pyo3-build-config-file.txt
+lumina_kernel/target/debug/build/pyo3-build-config-f7fce20681a04a66/out/pyo3-build-config.txt
 lumina_kernel/target/release/build/pyo3-build-config-3c1923811b76823a/out/pyo3-build-config-file.txt
 lumina_kernel/target/release/build/pyo3-build-config-3c1923811b76823a/out/pyo3-build-config.txt
 lumina_kernel/target/release/build/pyo3-build-config-b044cb66592be647/out/pyo3-build-config-file.txt
@@ -50,6 +52,7 @@ tests/test_compiler_v03_exporter.py
 tests/test_compiler_v03_planner.py
 tests/test_compiler_v03_quantizer.py
 tests/test_gpt.py
+tests/test_hal_integration.py
 tests/test_hardware_simulation.py
 tests/test_hardware_simulation_mock.py
 tests/test_nat_trainer.py

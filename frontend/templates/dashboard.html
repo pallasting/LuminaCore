@@ -1,0 +1,629 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>RainbowLuminaCore Dashboard</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+            color: #e0e0e0;
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        .header h1 {
+            font-size: 2.5rem;
+            background: linear-gradient(90deg, #00d4ff, #7b2cbf);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin-bottom: 10px;
+        }
+
+        .header p {
+            color: #888;
+            font-size: 1.1rem;
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 20px;
+            margin-bottom: 20px;
+        }
+
+        .card {
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 16px;
+            padding: 20px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+        }
+
+        .card-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 15px;
+            padding-bottom: 10px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .card-title {
+            font-size: 1.1rem;
+            font-weight: 600;
+            color: #00d4ff;
+        }
+
+        .metrics-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 15px;
+        }
+
+        .metric {
+            text-align: center;
+            padding: 15px;
+            background: rgba(0, 0, 0, 0.2);
+            border-radius: 10px;
+        }
+
+        .metric-value {
+            font-size: 2rem;
+            font-weight: bold;
+            color: #00d4ff;
+        }
+
+        .metric-label {
+            font-size: 0.85rem;
+            color: #888;
+            margin-top: 5px;
+        }
+
+        .tile-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 15px;
+        }
+
+        .tile {
+            background: rgba(0, 0, 0, 0.3);
+            border-radius: 12px;
+            padding: 15px;
+            text-align: center;
+            border: 2px solid transparent;
+            transition: all 0.3s ease;
+        }
+
+        .tile.idle {
+            border-color: #444;
+            opacity: 0.7;
+        }
+
+        .tile.processing {
+            border-color: #00d4ff;
+            box-shadow: 0 0 20px rgba(0, 212, 255, 0.3);
+        }
+
+        .tile-name {
+            font-size: 1.2rem;
+            font-weight: bold;
+            margin-bottom: 10px;
+        }
+
+        .tile-status {
+            font-size: 0.85rem;
+            padding: 4px 12px;
+            border-radius: 20px;
+            display: inline-block;
+            margin-bottom: 10px;
+        }
+
+        .tile-status.idle {
+            background: #444;
+        }
+
+        .tile-status.processing {
+            background: #00d4ff;
+            color: #000;
+        }
+
+        .tile-stats {
+            font-size: 0.85rem;
+            color: #aaa;
+        }
+
+        .progress-bar {
+            width: 100%;
+            height: 8px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 4px;
+            margin: 10px 0;
+            overflow: hidden;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, #00d4ff, #7b2cbf);
+            border-radius: 4px;
+            transition: width 0.5s ease;
+        }
+
+        .pipeline-visual {
+            display: flex;
+            gap: 10px;
+            margin: 20px 0;
+            overflow-x: auto;
+            padding: 10px 0;
+        }
+
+        .pipeline-stage {
+            flex: 1;
+            min-width: 150px;
+            background: rgba(0, 0, 0, 0.3);
+            border-radius: 10px;
+            padding: 15px;
+            text-align: center;
+        }
+
+        .pipeline-stage-name {
+            font-weight: bold;
+            margin-bottom: 10px;
+            color: #00d4ff;
+        }
+
+        .pipeline-layers {
+            display: flex;
+            justify-content: center;
+            gap: 3px;
+            flex-wrap: wrap;
+        }
+
+        .pipeline-layer {
+            width: 20px;
+            height: 20px;
+            border-radius: 4px;
+            background: #444;
+            font-size: 0.7rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .pipeline-layer.active {
+            background: linear-gradient(135deg, #00d4ff, #7b2cbf);
+        }
+
+        .pipeline-layer.completed {
+            background: #00ff88;
+            color: #000;
+        }
+
+        .event-log {
+            max-height: 300px;
+            overflow-y: auto;
+            font-family: 'Consolas', 'Monaco', monospace;
+            font-size: 0.85rem;
+        }
+
+        .event {
+            padding: 8px 12px;
+            border-radius: 6px;
+            margin-bottom: 5px;
+            background: rgba(0, 0, 0, 0.2);
+            display: flex;
+            gap: 10px;
+        }
+
+        .event-time {
+            color: #666;
+            white-space: nowrap;
+        }
+
+        .event-type {
+            padding: 2px 8px;
+            border-radius: 4px;
+            font-size: 0.75rem;
+            white-space: nowrap;
+        }
+
+        .event-type.rebalance {
+            background: #7b2cbf;
+        }
+
+        .event-type.imbalance_detected {
+            background: #ff6b6b;
+        }
+
+        .controls {
+            display: flex;
+            gap: 10px;
+            justify-content: center;
+            margin: 20px 0;
+        }
+
+        .btn {
+            padding: 12px 24px;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 1rem;
+            font-weight: 600;
+            transition: all 0.3s ease;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, #00d4ff, #0099cc);
+            color: #000;
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 20px rgba(0, 212, 255, 0.4);
+        }
+
+        .btn-secondary {
+            background: rgba(255, 255, 255, 0.1);
+            color: #fff;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+
+        .btn-secondary:hover {
+            background: rgba(255, 255, 255, 0.2);
+        }
+
+        .status-indicator {
+            display: inline-block;
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+            margin-right: 8px;
+            animation: pulse 2s infinite;
+        }
+
+        .status-indicator.active {
+            background: #00ff88;
+        }
+
+        .status-indicator.inactive {
+            background: #ff6b6b;
+            animation: none;
+        }
+
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.5; }
+        }
+
+        .temperature-bar {
+            height: 6px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 3px;
+            margin-top: 8px;
+            overflow: hidden;
+        }
+
+        .temperature-fill {
+            height: 100%;
+            border-radius: 3px;
+            transition: width 0.5s ease, background 0.3s ease;
+        }
+
+        .temperature-low { background: #00ff88; }
+        .temperature-medium { background: #ffaa00; }
+        .temperature-high { background: #ff6b6b; }
+
+        ::-webkit-scrollbar {
+            width: 8px;
+            height: 8px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: rgba(255, 255, 255, 0.05);
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: rgba(255, 255, 255, 0.2);
+            border-radius: 4px;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>🌈 RainbowLuminaCore Dashboard</h1>
+        <p>Real-time Distributed Photonic Computing Monitor</p>
+    </div>
+
+    <div class="container">
+        <!-- Controls -->
+        <div class="controls">
+            <button class="btn btn-primary" onclick="triggerRebalance()">🔄 Trigger Rebalance</button>
+            <button class="btn btn-secondary" onclick="resetStats()">📊 Reset Stats</button>
+        </div>
+
+        <!-- Metrics Overview -->
+        <div class="grid">
+            <div class="card">
+                <div class="card-header">
+                    <span class="card-title">📈 Performance Metrics</span>
+                    <span class="status-indicator active" id="connection-status"></span>
+                </div>
+                <div class="metrics-grid">
+                    <div class="metric">
+                        <div class="metric-value" id="metric-throughput">0</div>
+                        <div class="metric-label">Batches/min</div>
+                    </div>
+                    <div class="metric">
+                        <div class="metric-value" id="metric-latency">0</div>
+                        <div class="metric-label">Avg Latency (ms)</div>
+                    </div>
+                    <div class="metric">
+                        <div class="metric-value" id="metric-efficiency">0%</div>
+                        <div class="metric-label">Pipeline Efficiency</div>
+                    </div>
+                    <div class="metric">
+                        <div class="metric-value" id="metric-batches">0/0</div>
+                        <div class="metric-label">Batches</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="card">
+                <div class="card-header">
+                    <span class="card-title">🔥 System Status</span>
+                </div>
+                <div class="tile-grid" id="system-tiles">
+                    <!-- Tiles will be populated by JavaScript -->
+                </div>
+            </div>
+        </div>
+
+        <!-- Pipeline Visualization -->
+        <div class="card" style="margin-bottom: 20px;">
+            <div class="card-header">
+                <span class="card-title">⚡ Pipeline Execution Flow</span>
+            </div>
+            <div class="pipeline-visual" id="pipeline-visual">
+                <!-- Pipeline stages will be populated by JavaScript -->
+            </div>
+        </div>
+
+        <!-- Tile Details & Events -->
+        <div class="grid">
+            <div class="card">
+                <div class="card-header">
+                    <span class="card-title">📱 Tile Details</span>
+                </div>
+                <div class="tile-grid" id="tile-details">
+                    <!-- Tile details will be populated by JavaScript -->
+                </div>
+            </div>
+
+            <div class="card">
+                <div class="card-header">
+                    <span class="card-title">📋 Event Log</span>
+                </div>
+                <div class="event-log" id="event-log">
+                    <!-- Events will be populated by JavaScript -->
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Configuration
+        const UPDATE_INTERVAL = 1000; // 1 second
+        const API_BASE = '/api';
+
+        // State
+        let state = null;
+        let updateTimer = null;
+
+        // Fetch state from API
+        async function fetchState() {
+            try {
+                const response = await fetch(`${API_BASE}/state`);
+                state = await response.json();
+                updateDashboard();
+                document.getElementById('connection-status').className = 'status-indicator active';
+            } catch (error) {
+                console.error('Failed to fetch state:', error);
+                document.getElementById('connection-status').className = 'status-indicator inactive';
+            }
+        }
+
+        // Update dashboard with current state
+        function updateDashboard() {
+            if (!state) return;
+
+            // Update metrics
+            const metrics = state.metrics;
+            document.getElementById('metric-throughput').textContent = metrics.throughput.toFixed(1);
+            document.getElementById('metric-latency').textContent = metrics.avg_latency.toFixed(0);
+            document.getElementById('metric-efficiency').textContent = (metrics.pipeline_efficiency * 100).toFixed(0) + '%';
+            document.getElementById('metric-batches').textContent = `${metrics.completed_batches}/${metrics.total_batches}`;
+
+            // Update system tiles
+            updateSystemTiles();
+
+            // Update tile details
+            updateTileDetails();
+
+            // Update pipeline visual
+            updatePipelineVisual();
+
+            // Update event log
+            updateEventLog();
+        }
+
+        // Update system status tiles
+        function updateSystemTiles() {
+            const container = document.getElementById('system-tiles');
+            const tiles = state.tiles;
+
+            container.innerHTML = Object.values(tiles).map(tile => `
+                <div class="tile ${tile.status}">
+                    <div class="tile-name">${tile.tile_id}</div>
+                    <div class="tile-status ${tile.status}">${tile.status}</div>
+                    <div class="progress-bar">
+                        <div class="progress-fill" style="width: ${tile.utilization * 100}%"></div>
+                    </div>
+                    <div class="tile-stats">
+                        ${(tile.utilization * 100).toFixed(0)}% utilization
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        // Update detailed tile information
+        function updateTileDetails() {
+            const container = document.getElementById('tile-details');
+            const tiles = state.tiles;
+
+            container.innerHTML = Object.values(tiles).map(tile => {
+                // Temperature color
+                let tempClass = 'temperature-low';
+                let tempText = 'Cool';
+                if (tile.temperature > 50) {
+                    tempClass = 'temperature-medium';
+                    tempText = 'Warm';
+                }
+                if (tile.temperature > 70) {
+                    tempClass = 'temperature-high';
+                    tempText = 'Hot';
+                }
+
+                return `
+                    <div class="tile" style="text-align: left;">
+                        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px;">
+                            <strong style="color: #00d4ff;">${tile.tile_id}</strong>
+                            <span style="font-size: 0.85rem; color: #888;">${tile.tasks_completed} tasks</span>
+                        </div>
+                        <div style="font-size: 0.85rem; color: #aaa; margin-bottom: 5px;">
+                            Layer: ${tile.current_layer >= 0 ? tile.current_layer : 'Idle'}
+                        </div>
+                        <div style="font-size: 0.85rem; color: #aaa; margin-bottom: 5px;">
+                            Avg Time: ${tile.avg_task_time.toFixed(1)}ms
+                        </div>
+                        <div style="font-size: 0.85rem; color: #aaa;">
+                            Temperature: ${tile.temperature.toFixed(1)}°C (${tempText})
+                        </div>
+                        <div class="temperature-bar">
+                            <div class="temperature-fill ${tempClass}" style="width: ${Math.min(100, (tile.temperature / 90) * 100)}%"></div>
+                        </div>
+                    </div>
+                `;
+            }).join('');
+        }
+
+        // Update pipeline visualization
+        function updatePipelineVisual() {
+            const container = document.getElementById('pipeline-visual');
+            const tiles = state.tiles;
+            const layers = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11];
+
+            // Group layers by tile (3 layers per tile for 12 layers / 4 tiles)
+            const tileLayers = [
+                [0, 1, 2],
+                [3, 4, 5],
+                [6, 7, 8],
+                [9, 10, 11]
+            ];
+
+            container.innerHTML = tileLayers.map((layers, idx) => {
+                const tileId = `Tile-${idx}`;
+                const tile = tiles[tileId];
+                const isActive = tile.status === 'processing';
+                const currentLayer = tile.current_layer;
+
+                return `
+                    <div class="pipeline-stage" style="${isActive ? 'border: 2px solid #00d4ff; box-shadow: 0 0 15px rgba(0, 212, 255, 0.3);' : ''}">
+                        <div class="pipeline-stage-name">${tileId}</div>
+                        <div class="pipeline-layers">
+                            ${layers.map(layer => {
+                                let className = 'pipeline-layer';
+                                if (layer === currentLayer && isActive) className += ' active';
+                                if (layer < currentLayer && isActive) className += ' completed';
+                                return `<div class="${className}">${layer}</div>`;
+                            }).join('')}
+                        </div>
+                        <div style="margin-top: 10px; font-size: 0.85rem; color: #888;">
+                            ${isActive ? '🔵 Processing' : '⚪ Idle'}
+                        </div>
+                    </div>
+                `;
+            }).join('');
+        }
+
+        // Update event log
+        function updateEventLog() {
+            const container = document.getElementById('event-log');
+            const events = state.events;
+
+            container.innerHTML = events.map(event => `
+                <div class="event">
+                    <span class="event-time">${event.timestamp}</span>
+                    <span class="event-type ${event.event_type}">${event.event_type.replace('_', ' ')}</span>
+                    <span style="color: #aaa;">${event.details}</span>
+                </div>
+            `).join('');
+        }
+
+        // Trigger rebalance
+        async function triggerRebalance() {
+            try {
+                await fetch(`${API_BASE}/rebalance`, { method: 'POST' });
+            } catch (error) {
+                console.error('Failed to trigger rebalance:', error);
+            }
+        }
+
+        // Reset statistics
+        async function resetStats() {
+            try {
+                await fetch(`${API_BASE}/control`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ action: 'reset' })
+                });
+            } catch (error) {
+                console.error('Failed to reset stats:', error);
+            }
+        }
+
+        // Initialize dashboard
+        function init() {
+            fetchState();
+            updateTimer = setInterval(fetchState, UPDATE_INTERVAL);
+        }
+
+        // Start dashboard when page loads
+        document.addEventListener('DOMContentLoaded', init);
+
+        // Cleanup on page unload
+        window.addEventListener('beforeunload', () => {
+            if (updateTimer) {
+                clearInterval(updateTimer);
+            }
+        });
+    </script>
+</body>
+</html>
